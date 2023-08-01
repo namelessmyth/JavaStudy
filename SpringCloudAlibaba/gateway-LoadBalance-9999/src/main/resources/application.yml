@@ -1,0 +1,21 @@
+server:
+  port: 9999
+spring:
+  application:
+    name: gateway-LoadBalance-9999
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          #是否与服务发现组件进行结合，通过serviceId转发到具体的服务实例。默认为false，设为true便开启通过服务中心的自动根据 serviceId 创建路由的功能。
+          enabled: false #开启注册中心路由功能
+      routes: # 手动配置路由后，自动功能会自动禁用。
+        - id: nacos-provider #路由ID，没有固定要求，但是要保证唯一，建议配合服务名
+          uri: lb://nacos-provider # 匹配提供服务的路由地址
+          predicates: # 断言
+            - Path=/msb/**
+            #- Cookie=username,[a-z]+ # 匹配Cookie的key和value（正则表达式）
+            - Header=X-Request-Id,\d+ #表示数字
