@@ -1,9 +1,9 @@
-package com.sjj.mashibing.tank;
+package com.sjj.mashibing.tank.domain;
 
 /**
  * 坦克方向类<br>
  * @date 2023/7/31
  */
-public enum Direction {
+public enum Dir {
     LEFT, RIGHT, UP, DOWN
 }
