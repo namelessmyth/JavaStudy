@@ -7,6 +7,7 @@ import com.sjj.mashibing.tank.util.ResourceMgr;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -29,6 +30,7 @@ public class Tank {
     private final static int SPEED = 5;
     private Dir dir = Dir.DOWN;
     private boolean moving = false;
+    private boolean living = true;
     private Group group = Group.BAD;
     private TankFrame tf = null;
     Rectangle rect = new Rectangle();
@@ -54,7 +56,9 @@ public class Tank {
      * @param g
      */
     public void paint(Graphics g) throws IOException {
-        //g.fillRect(x, y, 50, 50);
+        if(!isLiving()){
+            return;
+        }
         //使用坦克图片，绘制坦克
         switch(dir) {
             case LEFT:
@@ -152,5 +156,12 @@ public class Tank {
         //Client.INSTANCE.send(new BulletNewMsg(b));
 
         //if(this.group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
+    }
+
+    public void die() {
+        this.living = false;
+        int eX = this.getX() + Tank.WIDTH/2 - Explode.WIDTH/2;
+        int eY = this.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
+        TankFrame.INSTANCE.explodes.add(new Explode(eX, eY));
     }
 }

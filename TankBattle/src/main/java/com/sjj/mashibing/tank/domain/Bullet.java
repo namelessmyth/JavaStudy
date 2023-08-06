@@ -1,11 +1,14 @@
 package com.sjj.mashibing.tank.domain;
 
+import com.sjj.mashibing.tank.simple.Tank;
 import com.sjj.mashibing.tank.simple.TankFrame;
 import com.sjj.mashibing.tank.util.ResourceMgr;
+import lombok.Data;
 
 import java.awt.*;
 import java.util.UUID;
 
+@Data
 public class Bullet {
     private static final int SPEED = 8;
 
@@ -15,12 +18,11 @@ public class Bullet {
     private UUID id = UUID.randomUUID();
     private UUID playerId;
 
-    Rectangle rect = new Rectangle();
+    private Rectangle rect = new Rectangle();
 
     private int x, y;
-
     private Dir dir;
-
+    //判断字段是否活着（超出边界）
     private boolean living = true;
 
     TankFrame tf = null;
@@ -45,36 +47,7 @@ public class Bullet {
         this.living = false;
     }
 
-    public Dir getDir() {
-        return dir;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public UUID getPlayerId() {
-        return playerId;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public boolean isLiving() {
-        return living;
-    }
-
     private void move() {
-
         switch (dir) {
             case LEFT:
                 x -= SPEED;
@@ -89,12 +62,31 @@ public class Bullet {
                 y += SPEED;
                 break;
         }
+        boundCheck();
 
-        //update rect
+        //移动的同时修改长方形坐标
         rect.x = this.x;
         rect.y = this.y;
+    }
 
-        if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) living = false;
+    /**
+     * 检查子弹是否超出窗口边界
+     */
+    public void boundCheck() {
+        if (x < 0 || x > TankFrame.GAME_WIDTH || y < 30 || y > TankFrame.GAME_HEIGHT) {
+            living = false;
+        }
+    }
+
+    public void collideWith(Tank tank) {
+        if (this.playerId.equals(tank.getId())) {
+            return;
+        }
+        if (this.isLiving() && tank.isLiving() && this.getRect().intersects(tank.getRect())) {
+            this.die();
+            tank.die();
+            //Client.INSTANCE.send(new TankDieMsg(this.id, tank.getId()));
+        }
 
     }
 
@@ -118,33 +110,5 @@ public class Bullet {
                 break;
         }
         move();
-    }
-
-    public void setDir(Dir dir) {
-        this.dir = dir;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public void setLiving(boolean living) {
-        this.living = living;
-    }
-
-    public void setPlayerId(UUID playerId) {
-        this.playerId = playerId;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 }

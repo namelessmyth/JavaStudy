@@ -30,11 +30,12 @@ public class TankFrame extends Frame {
 
     Random r = new Random();
     Image offScreenImage = null;
-    Tank mytank = new Tank(r.nextInt(GAME_WIDTH - TANK_SIZE), r.nextInt(GAME_HEIGHT + TANK_SIZE), Dir.UP, Group.GOOD, this);
-    Tank enemy = new Tank(r.nextInt(GAME_WIDTH - TANK_SIZE), r.nextInt(GAME_HEIGHT + TANK_SIZE), Dir.UP, Group.BAD, this);
+    Tank mytank = new Tank(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD, this);
+    Tank enemy = new Tank(GAME_WIDTH / 2 + 100 - TANK_SIZE, GAME_HEIGHT - 70, Dir.UP, Group.BAD, this);
     Bullet bullet = new Bullet(UUID.randomUUID(), mytank.getX(), mytank.getY(), Dir.UP, Group.GOOD, this);
     //子弹
     public List<Bullet> bullets = new ArrayList<Bullet>();
+    List<Explode> explodes = new ArrayList<>();
 
     private TankFrame() throws HeadlessException {
         //创建游戏的主Frame
@@ -44,20 +45,32 @@ public class TankFrame extends Frame {
 
         //加入主窗口的键盘事件监听，让键盘可以控制坦克
         this.addKeyListener(new TankKeyListener());
+        log.info("tank war Main frame initialization completed");
     }
 
     /**
-     * 覆盖此方法后，会在frame创建时就执行。
-     *
+     * 覆盖此方法，在frame创建时就执行。
      * @param g
      */
     @Override
     public void paint(Graphics g) {
         try {
+            Color c = g.getColor();
+            g.setColor(Color.WHITE);
+            g.drawString("bullets: " + bullets.size(), 10, 50);
+            g.setColor(c);
+
             mytank.paint(g);
             enemy.paint(g);
             for (int i = 0; i < bullets.size(); i++) {
-                bullets.get(i).paint(g);
+                Bullet b = bullets.get(i);
+                b.collideWith(enemy);
+                if (b.isLiving()) {
+                    bullets.get(i).paint(g);
+                } else {
+                    //如果子弹超出边界则不在打印，且需要移除。否则可能内存泄露。
+                    bullets.remove(i);
+                }
             }
         } catch (IOException e) {
             log.error("坦克绘制异常：", e);

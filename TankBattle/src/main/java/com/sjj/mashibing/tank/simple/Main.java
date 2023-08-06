@@ -18,6 +18,7 @@ public class Main {
     public static void main(String[] args) {
         log.info("tank war starting ...");
         TankFrame.INSTANCE.setVisible(true);
+        log.info("tank war Main frame is visible");
         for (; ; ) {
             try {
                 //每隔25ms调用之前的绘制方法，相当于40桢动画
