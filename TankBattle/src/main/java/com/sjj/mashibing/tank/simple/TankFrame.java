@@ -25,30 +25,38 @@ public class TankFrame extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
     public static final int GAME_WIDTH = 800;
     public static final int GAME_HEIGHT = 600;
-    public static final int TANK_SIZE = 30;
+    public static final int ENEMY_SIZE = 5;
 
     Random r = new Random();
     Image offScreenImage = null;
     TankPlayer myTank = new TankPlayer(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD, this);
-    Tank enemy = new Tank(GAME_WIDTH / 2 + 100 - TANK_SIZE, GAME_HEIGHT - 70, Dir.UP, Group.BAD, this);
+    List<Tank> tanks = new ArrayList<>(ENEMY_SIZE);
     Bullet bullet = new Bullet(UUID.randomUUID(), myTank.getX(), myTank.getY(), Dir.UP, Group.GOOD, this);
     //子弹
     public List<Bullet> bullets = new ArrayList<Bullet>();
-    List<Explode> explodes = new ArrayList<>();
+    //爆炸
+    public List<Explode> explodes = new ArrayList<>();
 
     private TankFrame() throws HeadlessException {
         //创建游戏的主Frame
         this.setTitle("tank war");
         this.setSize(GAME_WIDTH, GAME_HEIGHT);
         this.setLocation(400, 100);
-
         //加入主窗口的键盘事件监听，让键盘可以控制坦克
         this.addKeyListener(new TankKeyListener());
+
+        int gap = GAME_WIDTH / ENEMY_SIZE;
+        for (int i = 0; i < ENEMY_SIZE; i++) {
+            Tank tank = new Tank(gap * i, 30, Dir.DOWN, Group.BAD, this);
+            tanks.add(tank);
+        }
+
         log.info("tank war Main frame initialization completed");
     }
 
     /**
      * 覆盖此方法，在frame创建时就执行。
+     *
      * @param g
      */
     @Override
@@ -56,20 +64,27 @@ public class TankFrame extends Frame {
         try {
             Color c = g.getColor();
             g.setColor(Color.WHITE);
-            g.drawString("bullets: " + bullets.size(), 10, 50);
+            g.drawString("bullets: " + bullets.size(), 10, 45);
+            g.drawString("enymies: " + tanks.size(), 10, 60);
             g.setColor(c);
 
             myTank.paint(g);
-            enemy.paint(g);
+            for (Tank tank : tanks) {
+                tank.paint(g);
+            }
             for (int i = 0; i < bullets.size(); i++) {
                 Bullet b = bullets.get(i);
-                b.collideWith(enemy);
+                for (int i1 = 0; i1 < tanks.size(); i1++) {
+                    b.collideWith(tanks.get(i1));
+                }
                 if (b.isLiving()) {
                     bullets.get(i).paint(g);
-                } else {
-                    //如果子弹超出边界则不在打印，且需要移除。否则可能内存泄露。
-                    bullets.remove(i);
                 }
+            }
+
+            for (int i = 0; i < explodes.size(); i++) {
+                Explode b = explodes.get(i);
+                b.paint(g);
             }
         } catch (IOException e) {
             log.error("坦克绘制异常：", e);

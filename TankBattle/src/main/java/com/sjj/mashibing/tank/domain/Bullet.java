@@ -4,11 +4,15 @@ import com.sjj.mashibing.tank.simple.Tank;
 import com.sjj.mashibing.tank.simple.TankFrame;
 import com.sjj.mashibing.tank.util.ResourceMgr;
 import lombok.Data;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.util.UUID;
 
 @Data
+@Slf4j
+@ToString(exclude = {"tf"})
 public class Bullet {
     private static final int SPEED = 8;
 
@@ -45,6 +49,8 @@ public class Bullet {
 
     public void die() {
         this.living = false;
+        TankFrame.INSTANCE.bullets.remove(this);
+        log.info("this bullet is die:{}", this);
     }
 
     private void move() {
@@ -75,26 +81,25 @@ public class Bullet {
     public void boundCheck() {
         if (x < 0 || x > TankFrame.GAME_WIDTH || y < 30 || y > TankFrame.GAME_HEIGHT) {
             living = false;
+            TankFrame.INSTANCE.bullets.remove(this);
         }
     }
 
-    public void collideWith(Tank tank) {
-        if (this.playerId.equals(tank.getId())) {
-            return;
+    public boolean collideWith(Tank tank) {
+        if (this.playerId.equals(tank.getId()) || this.getGroup() == tank.getGroup()) {
+            //防止自相残杀
+            return false;
         }
         if (this.isLiving() && tank.isLiving() && this.getRect().intersects(tank.getRect())) {
             this.die();
             tank.die();
             //Client.INSTANCE.send(new TankDieMsg(this.id, tank.getId()));
+            return true;
         }
-
+        return false;
     }
 
     public void paint(Graphics g) {
-        if (!living) {
-            tf.bullets.remove(this);
-        }
-
         switch (dir) {
             case LEFT:
                 g.drawImage(ResourceMgr.bulletL, x, y, null);

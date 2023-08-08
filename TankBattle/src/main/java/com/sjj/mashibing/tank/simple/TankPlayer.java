@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 @Data
 @Slf4j
-@ToString(exclude={"tf","rect"})
+@ToString(exclude = {"tf", "rect"})
 @NoArgsConstructor
 public class TankPlayer {
     private UUID id = UUID.randomUUID();
@@ -46,33 +46,31 @@ public class TankPlayer {
         this.group = group;
         this.tf = tf;
 
-        rect.x = this.x;
-        rect.y = this.y;
-        rect.width = WIDTH;
-        rect.height = HEIGHT;
+        updateRect();
     }
 
     /**
      * 覆盖此方法后，会在frame创建时就执行。
+     *
      * @param g
      */
     public void paint(Graphics g) throws IOException {
-        if(!isLiving()){
+        if (!isLiving()) {
             return;
         }
         //使用坦克图片，绘制坦克
-        switch(dir) {
+        switch (dir) {
             case LEFT:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
                 break;
             case UP:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
                 break;
             case RIGHT:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
                 break;
             case DOWN:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
                 break;
         }
     }
@@ -105,21 +103,30 @@ public class TankPlayer {
     }
 
     public void move() {
+        new Thread(() -> new Audio("audio/tank_move.wav").play()).start();
+
+        int xNew = x;
+        int yNew = y;
         switch (dir) {
             case LEFT:
-                x -= SPEED;
+                xNew = x - SPEED;
                 break;
             case RIGHT:
-                x += SPEED;
+                xNew = x + SPEED;
                 break;
             case UP:
-                y -= SPEED;
+                yNew = y - SPEED;
                 break;
             case DOWN:
-                y += SPEED;
+                yNew = y + SPEED;
                 break;
             default:
                 break;
+        }
+        if (boundCheck(xNew, yNew)) {
+            setX(xNew);
+            setY(yNew);
+            updateRect();
         }
     }
 
@@ -147,22 +154,39 @@ public class TankPlayer {
     }
 
     public void fire() {
+        new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();
         //根据坦克坐标计算子弹坐标，使子弹出现在坦克中部。
-        int bX = this.x + TankPlayer.WIDTH/2 - Bullet.WIDTH/2;
-        int bY = this.y + TankPlayer.HEIGHT/2 - Bullet.HEIGHT/2;
+        int bX = this.x + TankPlayer.WIDTH / 2 - Bullet.WIDTH / 2;
+        int bY = this.y + TankPlayer.HEIGHT / 2 - Bullet.HEIGHT / 2;
         Bullet b = new Bullet(this.id, bX, bY, this.dir, this.group, this.tf);
-
         tf.bullets.add(b);
-
         //Client.INSTANCE.send(new BulletNewMsg(b));
         //if(this.group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
     }
 
     public void die() {
         this.living = false;
-        int eX = this.getX() + TankPlayer.WIDTH/2 - Explode.WIDTH/2;
-        int eY = this.getY() + TankPlayer.HEIGHT/2 - Explode.HEIGHT/2;
-        TankFrame.INSTANCE.explodes.add(new Explode(eX, eY));
+        int eX = this.getX() + TankPlayer.WIDTH / 2 - Explode.WIDTH / 2;
+        int eY = this.getY() + TankPlayer.HEIGHT / 2 - Explode.HEIGHT / 2;
+        tf.explodes.add(new Explode(eX, eY));
         log.info("this tank is die.{}", this);
+    }
+
+    /**
+     * 检查对象是否超出窗口边界
+     */
+    public boolean boundCheck(int x, int y) {
+        if (x < 0 || x > TankFrame.GAME_WIDTH - WIDTH || y < 30 || y > TankFrame.GAME_HEIGHT - HEIGHT) {
+            log.info("坐标超出边界，x:{}，y:{}", x, y);
+            return false;
+        }
+        return true;
+    }
+
+    public void updateRect() {
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 }

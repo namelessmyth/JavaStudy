@@ -8,20 +8,20 @@
         <!-- 当前项目名称，供下方引用 -->
         <property name="PROJECT_NAME" value="tank-battle" />
         <!-- 日志格式（同步）.异步如果要打印位置信息，性能将比同步还低，而且需要加入配置项才能开启 -->
-        <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%-5t|%-5level|%l: %msg%n" />
+        <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%-5level|%-5t|%l: %msg%n" />
         <!-- 日志格式（同步异步通用 -->
-        <property name="LOG_PATTERN_ALL" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%-5t|%-5level|%logger{36}: %msg%n" />
+        <property name="LOG_PATTERN_ALL" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%-5level|%-5t|%logger{36}: %msg%n" />
         <!-- 日志主目录。如果想把日志输出到tomcat底下时使用。 -->
         <property name="LOG_HOME">${web:rootDir}/WEB-INF/logs</property>
     </properties>
 
     <Appenders>
         <Console name="STDOUT" target="SYSTEM_OUT">
-            <PatternLayout Pattern ="${LOG_PATTERN}" />
+            <PatternLayout charset="UTF-8" Pattern ="${LOG_PATTERN}" />
         </Console>
 
         <RollingFile name="SjjLog" fileName="logs/${PROJECT_NAME}.log" filePattern="logs/${PROJECT_NAME}-%d_%i.log">
-            <PatternLayout Pattern ="${LOG_PATTERN}" />
+            <PatternLayout charset="UTF-8" Pattern ="${LOG_PATTERN}" />
             <Policies>
                 <!-- 每天生成一个，同时如果超过10MB还会再生成 -->
                 <TimeBasedTriggeringPolicy/>

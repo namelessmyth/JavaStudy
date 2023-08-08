@@ -4,14 +4,12 @@ import com.sjj.mashibing.tank.domain.Bullet;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
 import com.sjj.mashibing.tank.util.ResourceMgr;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Random;
 import java.util.UUID;
@@ -82,30 +80,39 @@ public class Tank {
         if (moving) {
             move();
         }
-        if(random.nextInt(100) < 10){
+        if (random.nextInt(100) < 3) {
             fire();
         }
     }
 
     public void move() {
+        int xNew = x;
+        int yNew = y;
         switch (dir) {
             case LEFT:
-                x -= SPEED;
+                xNew = x - SPEED;
                 break;
             case RIGHT:
-                x += SPEED;
+                xNew = x + SPEED;
                 break;
             case UP:
-                y -= SPEED;
+                yNew = y - SPEED;
                 break;
             case DOWN:
-                y += SPEED;
+                yNew = y + SPEED;
                 break;
             default:
                 break;
         }
+
+        if (boundCheck(xNew, yNew)) {
+            setX(xNew);
+            setY(yNew);
+            updateRect();
+        }
+
         //移动之后，随机获取一个方向。
-        if(random.nextInt(100) < 10){
+        if (random.nextInt(100) < 5) {
             this.setDir(Dir.random());
         }
     }
@@ -126,7 +133,28 @@ public class Tank {
         this.living = false;
         int eX = this.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
         int eY = this.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
+        TankFrame.INSTANCE.tanks.remove(this);
         TankFrame.INSTANCE.explodes.add(new Explode(eX, eY));
         log.info("this tank is die.{}", this);
+    }
+
+    /**
+     * 检查对象是否超出窗口边界
+     */
+    public boolean boundCheck(int x, int y) {
+        if (x < 0 || x > TankFrame.GAME_WIDTH - WIDTH || y < 30 || y > TankFrame.GAME_HEIGHT - HEIGHT) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 更新坦克的长方形坐标
+     */
+    public void updateRect() {
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 }
