@@ -3,7 +3,6 @@ package com.sjj.mashibing.tank.simple;
 import com.sjj.mashibing.tank.domain.Bullet;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
@@ -30,9 +29,9 @@ public class TankFrame extends Frame {
 
     Random r = new Random();
     Image offScreenImage = null;
-    Tank mytank = new Tank(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD, this);
+    TankPlayer myTank = new TankPlayer(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD, this);
     Tank enemy = new Tank(GAME_WIDTH / 2 + 100 - TANK_SIZE, GAME_HEIGHT - 70, Dir.UP, Group.BAD, this);
-    Bullet bullet = new Bullet(UUID.randomUUID(), mytank.getX(), mytank.getY(), Dir.UP, Group.GOOD, this);
+    Bullet bullet = new Bullet(UUID.randomUUID(), myTank.getX(), myTank.getY(), Dir.UP, Group.GOOD, this);
     //子弹
     public List<Bullet> bullets = new ArrayList<Bullet>();
     List<Explode> explodes = new ArrayList<>();
@@ -60,7 +59,7 @@ public class TankFrame extends Frame {
             g.drawString("bullets: " + bullets.size(), 10, 50);
             g.setColor(c);
 
-            mytank.paint(g);
+            myTank.paint(g);
             enemy.paint(g);
             for (int i = 0; i < bullets.size(); i++) {
                 Bullet b = bullets.get(i);
@@ -107,12 +106,12 @@ public class TankFrame extends Frame {
     private class TankKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            mytank.keyPressed(e);
+            myTank.keyPressed(e);
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            mytank.keyReleased(e);
+            myTank.keyReleased(e);
         }
     }
 }

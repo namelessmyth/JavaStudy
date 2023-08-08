@@ -1,13 +1,12 @@
 package com.sjj.mashibing.tank.simple;
 
-import com.sjj.mashibing.tank.simple.TankFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 类功能说明<br>
+ * 坦克大战启动类<br>
  *
  * @author namelessmyth
  * @version 1.0
@@ -25,15 +24,16 @@ public class Main {
                 TimeUnit.MILLISECONDS.sleep(25);
                 TankFrame.INSTANCE.repaint();
             } catch (InterruptedException e) {
-                log.error("paint-InterruptedException:", e);
+                log.error("Main-InterruptedException:", e);
             }
         }
     }
 
+    @Deprecated
     public static void newFrame() {
         Frame f = new Frame("tank war");
-        f.setLocation(400,100);
-        f.setSize(800,600);
+        f.setLocation(400, 100);
+        f.setSize(800, 600);
         f.setVisible(true);
     }
 }
