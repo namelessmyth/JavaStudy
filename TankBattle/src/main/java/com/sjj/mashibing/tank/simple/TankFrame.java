@@ -3,6 +3,7 @@ package com.sjj.mashibing.tank.simple;
 import com.sjj.mashibing.tank.domain.Bullet;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
+import com.sjj.mashibing.tank.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * 坦克大战主Frame类<br>
@@ -22,20 +22,20 @@ import java.util.UUID;
  */
 @Slf4j
 public class TankFrame extends Frame {
-    public static final TankFrame INSTANCE = new TankFrame();
-    public static final int GAME_WIDTH = 800;
-    public static final int GAME_HEIGHT = 600;
-    public static final int ENEMY_SIZE = 5;
+    public static final int GAME_WIDTH = ConfigUtil.getInt("frame.main.width");
+    public static final int GAME_HEIGHT = ConfigUtil.getInt("frame.main.height");
+    public static final int ENEMY_SIZE = ConfigUtil.getInt("tank.enemy.size");
 
     Random r = new Random();
     Image offScreenImage = null;
     TankPlayer myTank = new TankPlayer(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD, this);
+    //敌方坦克
     List<Tank> tanks = new ArrayList<>(ENEMY_SIZE);
-    Bullet bullet = new Bullet(UUID.randomUUID(), myTank.getX(), myTank.getY(), Dir.UP, Group.GOOD, this);
     //子弹
     public List<Bullet> bullets = new ArrayList<Bullet>();
     //爆炸
     public List<Explode> explodes = new ArrayList<>();
+    public static final TankFrame INSTANCE = new TankFrame();
 
     private TankFrame() throws HeadlessException {
         //创建游戏的主Frame

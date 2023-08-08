@@ -1,9 +1,15 @@
 package com.sjj.mashibing.tank.simple;
 
+import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.setting.dialect.PropsUtil;
 import com.sjj.mashibing.tank.domain.Bullet;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
+import com.sjj.mashibing.tank.simple.fire.FireStrategy;
+import com.sjj.mashibing.tank.util.ConfigUtil;
 import com.sjj.mashibing.tank.util.ResourceMgr;
+import lombok.ConfigurationKeys;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -38,6 +44,8 @@ public class TankPlayer {
     public static int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
+    private FireStrategy fireStrategy;
+
     public TankPlayer(int x, int y, Dir dir, Group group, TankFrame tf) {
         super();
         this.x = x;
@@ -46,6 +54,7 @@ public class TankPlayer {
         this.group = group;
         this.tf = tf;
 
+        fireStrategy = ReflectUtil.newInstance(ConfigUtil.getStr("tank.player.fire.strategy"));
         updateRect();
     }
 
@@ -155,13 +164,7 @@ public class TankPlayer {
 
     public void fire() {
         new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();
-        //根据坦克坐标计算子弹坐标，使子弹出现在坦克中部。
-        int bX = this.x + TankPlayer.WIDTH / 2 - Bullet.WIDTH / 2;
-        int bY = this.y + TankPlayer.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        Bullet b = new Bullet(this.id, bX, bY, this.dir, this.group, this.tf);
-        tf.bullets.add(b);
-        //Client.INSTANCE.send(new BulletNewMsg(b));
-        //if(this.group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
+        fireStrategy.fire(this);
     }
 
     public void die() {
