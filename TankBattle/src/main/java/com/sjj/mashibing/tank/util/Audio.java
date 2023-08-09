@@ -1,5 +1,5 @@
 
-package com.sjj.mashibing.tank.simple;
+package com.sjj.mashibing.tank.util;
 
 import lombok.Data;
 
@@ -9,7 +9,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.SourceDataLine;
 
 @Data

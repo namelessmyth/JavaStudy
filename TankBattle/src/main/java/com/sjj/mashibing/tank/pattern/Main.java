@@ -1,4 +1,4 @@
-package com.sjj.mashibing.tank.simple;
+package com.sjj.mashibing.tank.pattern;
 
 import com.sjj.mashibing.tank.util.Audio;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,8 @@ public class Main {
     public static void main(String[] args) {
         log.info("tank war starting ...");
         TankFrame.INSTANCE.setVisible(true);
-        new Thread(() -> new Audio("audio/war1.wav").loop()).start();
         log.info("tank war Main frame is visible");
+        new Thread(() -> new Audio("audio/war1.wav").loop()).start();
 
         for (; ; ) {
             try {

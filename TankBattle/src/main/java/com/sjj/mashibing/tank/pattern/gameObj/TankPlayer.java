@@ -1,8 +1,12 @@
-package com.sjj.mashibing.tank.simple;
+package com.sjj.mashibing.tank.pattern.gameObj;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
+import com.sjj.mashibing.tank.pattern.TankFrame;
+import com.sjj.mashibing.tank.pattern.strategy.FireStrategy;
 import com.sjj.mashibing.tank.util.Audio;
+import com.sjj.mashibing.tank.util.ConfigUtil;
 import com.sjj.mashibing.tank.util.ResourceMgr;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * 玩家控制的坦克<br>
@@ -22,31 +25,34 @@ import java.util.UUID;
  */
 @Data
 @Slf4j
-@ToString(exclude = {"tf", "rect"})
+@ToString(exclude = {"rect"})
 @NoArgsConstructor
-public class TankPlayer {
-    private UUID id = UUID.randomUUID();
-    private int x = 100;
-    private int y = 100;
+public class TankPlayer extends GameObject {
     private final static int SPEED = 5;
     private Dir dir = Dir.DOWN;
     private boolean moving = false;
     private boolean living = true;
     private Group group = Group.GOOD;
-    private TankFrame tf = null;
-    private Rectangle rect = new Rectangle();
     public static int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
-    public TankPlayer(int x, int y, Dir dir, Group group, TankFrame tf) {
+    private FireStrategy fireStrategy;
+
+    public TankPlayer(int x, int y, Dir dir, Group group) {
         super();
-        this.x = x;
-        this.y = y;
+        setX(x);
+        setY(y);
+        setW(WIDTH);
+        setH(HEIGHT);
         this.dir = dir;
         this.group = group;
-        this.tf = tf;
 
-        updateRect();
+        setRect(new Rectangle());
+        getRect().x = getX();
+        getRect().y = getY();
+        getRect().width = WIDTH;
+        getRect().height = HEIGHT;
+        fireStrategy = ReflectUtil.newInstance(ConfigUtil.getStr("tank.player.fire.strategy"));
     }
 
     /**
@@ -61,16 +67,16 @@ public class TankPlayer {
         //使用坦克图片，绘制坦克
         switch (dir) {
             case LEFT:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL, getX(), getY(), null);
                 break;
             case UP:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankU : ResourceMgr.badTankU, getX(), getY(), null);
                 break;
             case RIGHT:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankR : ResourceMgr.badTankR, getX(), getY(), null);
                 break;
             case DOWN:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankD : ResourceMgr.badTankD, getX(), getY(), null);
                 break;
         }
     }
@@ -105,20 +111,20 @@ public class TankPlayer {
     public void move() {
         new Thread(() -> new Audio("audio/tank_move.wav").play()).start();
 
-        int xNew = x;
-        int yNew = y;
+        int xNew = getX();
+        int yNew = getY();
         switch (dir) {
             case LEFT:
-                xNew = x - SPEED;
+                xNew = getX() - SPEED;
                 break;
             case RIGHT:
-                xNew = x + SPEED;
+                xNew = getX() + SPEED;
                 break;
             case UP:
-                yNew = y - SPEED;
+                yNew = getY() - SPEED;
                 break;
             case DOWN:
-                yNew = y + SPEED;
+                yNew = getY() + SPEED;
                 break;
             default:
                 break;
@@ -155,18 +161,14 @@ public class TankPlayer {
 
     public void fire() {
         new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();
-        //根据坦克坐标计算子弹坐标，使子弹出现在坦克中部。
-        int bX = this.getX() + TankPlayer.WIDTH / 2 - Bullet.WIDTH / 2;
-        int bY = this.getY() + TankPlayer.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        Bullet b = new Bullet(this.getId(), bX, bY, this.getDir(), this.getGroup(), null);
-        TankFrame.INSTANCE.bullets.add(b);
+        fireStrategy.fire(this);
     }
 
     public void die() {
         this.living = false;
         int eX = this.getX() + TankPlayer.WIDTH / 2 - Explode.WIDTH / 2;
         int eY = this.getY() + TankPlayer.HEIGHT / 2 - Explode.HEIGHT / 2;
-        tf.explodes.add(new Explode(eX, eY));
+        TankFrame.INSTANCE.add(new Explode(getX(), getY()));
         log.info("this tank is die.{}", this);
     }
 
@@ -182,9 +184,7 @@ public class TankPlayer {
     }
 
     public void updateRect() {
-        rect.x = this.x;
-        rect.y = this.y;
-        rect.width = WIDTH;
-        rect.height = HEIGHT;
+        getRect().x = getX();
+        getRect().y = getY();
     }
 }

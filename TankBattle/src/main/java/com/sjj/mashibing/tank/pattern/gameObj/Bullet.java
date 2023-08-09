@@ -1,7 +1,8 @@
-package com.sjj.mashibing.tank.domain;
+package com.sjj.mashibing.tank.pattern.gameObj;
 
-import com.sjj.mashibing.tank.simple.Tank;
-import com.sjj.mashibing.tank.simple.TankFrame;
+import com.sjj.mashibing.tank.domain.Dir;
+import com.sjj.mashibing.tank.domain.Group;
+import com.sjj.mashibing.tank.pattern.TankFrame;
 import com.sjj.mashibing.tank.util.ResourceMgr;
 import lombok.Data;
 import lombok.ToString;
@@ -12,44 +13,37 @@ import java.util.UUID;
 
 @Data
 @Slf4j
-@ToString(exclude = {"tf"})
-public class Bullet {
+@ToString
+public class Bullet extends GameObject {
     private static final int SPEED = 8;
 
     public static int WIDTH = ResourceMgr.bulletD.getWidth();
     public static int HEIGHT = ResourceMgr.bulletD.getHeight();
-
-    private UUID id = UUID.randomUUID();
     private UUID playerId;
-
-    private Rectangle rect = new Rectangle();
-
     private int x, y;
     private Dir dir;
     //判断字段是否活着（超出边界）
     private boolean living = true;
-
-    TankFrame tf = null;
-
     private Group group = Group.BAD;
 
-    public Bullet(UUID playerId, int x, int y, Dir dir, Group group, TankFrame tf) {
+    public Bullet(UUID playerId, int x, int y, Dir dir, Group group) {
+        super();
         this.playerId = playerId;
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tf = tf;
 
-        rect.x = this.x;
-        rect.y = this.y;
-        rect.width = WIDTH;
-        rect.height = HEIGHT;
+        setRect(new Rectangle());
+        getRect().x = getX();
+        getRect().y = getY();
+        getRect().width = WIDTH;
+        getRect().height = HEIGHT;
     }
 
     public void die() {
         this.living = false;
-        TankFrame.INSTANCE.bullets.remove(this);
+        TankFrame.INSTANCE.remove(this);
         log.info("this bullet is die:{}", this);
     }
 
@@ -71,8 +65,8 @@ public class Bullet {
         boundCheck();
 
         //移动的同时修改长方形坐标
-        rect.x = this.x;
-        rect.y = this.y;
+        getRect().x = this.x;
+        getRect().y = this.y;
     }
 
     /**
@@ -81,7 +75,7 @@ public class Bullet {
     public void boundCheck() {
         if (x < 0 || x > TankFrame.GAME_WIDTH || y < 30 || y > TankFrame.GAME_HEIGHT) {
             living = false;
-            TankFrame.INSTANCE.bullets.remove(this);
+            TankFrame.INSTANCE.remove(this);
         }
     }
 

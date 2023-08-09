@@ -1,6 +1,7 @@
-package com.sjj.mashibing.tank.simple.fire;
+package com.sjj.mashibing.tank.pattern.strategy;
 
-import com.sjj.mashibing.tank.simple.TankPlayer;
+
+import com.sjj.mashibing.tank.pattern.gameObj.TankPlayer;
 
 /**
  * 策略模式-坦克开火接口<br>

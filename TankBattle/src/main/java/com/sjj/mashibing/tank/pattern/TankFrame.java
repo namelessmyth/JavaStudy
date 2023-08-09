@@ -1,7 +1,16 @@
-package com.sjj.mashibing.tank.simple;
+package com.sjj.mashibing.tank.pattern;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
+import com.sjj.mashibing.tank.pattern.chain.Collider;
+import com.sjj.mashibing.tank.pattern.gameObj.GameObject;
+import com.sjj.mashibing.tank.pattern.gameObj.Tank;
+import com.sjj.mashibing.tank.pattern.gameObj.TankPlayer;
+import com.sjj.mashibing.tank.pattern.gameObj.Wall;
 import com.sjj.mashibing.tank.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,16 +33,12 @@ public class TankFrame extends Frame {
     public static final int GAME_WIDTH = ConfigUtil.getInt("frame.main.width");
     public static final int GAME_HEIGHT = ConfigUtil.getInt("frame.main.height");
     public static final int ENEMY_SIZE = ConfigUtil.getInt("tank.enemy.size");
-
     Random r = new Random();
     Image offScreenImage = null;
-    TankPlayer myTank = new TankPlayer(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD, this);
-    //敌方坦克
-    List<Tank> tanks = new ArrayList<>(ENEMY_SIZE);
-    //子弹
-    public List<Bullet> bullets = new ArrayList<Bullet>();
-    //爆炸
-    public List<Explode> explodes = new ArrayList<>();
+    TankPlayer myTank;
+    public List<GameObject> objects;
+    public List<Collider> colliders;
+
     public static final TankFrame INSTANCE = new TankFrame();
 
     private TankFrame() throws HeadlessException {
@@ -44,56 +49,67 @@ public class TankFrame extends Frame {
         //加入主窗口的键盘事件监听，让键盘可以控制坦克
         this.addKeyListener(new TankKeyListener());
 
-        int gap = GAME_WIDTH / ENEMY_SIZE;
-        for (int i = 0; i < ENEMY_SIZE; i++) {
-            Tank tank = new Tank(gap * i, 30, Dir.DOWN, Group.BAD, this);
-            tanks.add(tank);
-        }
-
+        initGameObjects();
+        initColliders();
         log.info("tank war Main frame initialization completed");
     }
 
-    /**
-     * 覆盖此方法，在frame创建时就执行。
-     *
-     * @param g
-     */
+    private void initGameObjects() {
+        myTank = new TankPlayer(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD);
+
+        objects = new ArrayList<>();
+        int gap = GAME_WIDTH / ENEMY_SIZE;
+        for (int i = 0; i < ENEMY_SIZE; i++) {
+            Tank tank = new Tank(gap * i, 30, Dir.DOWN, Group.BAD);
+            add(tank);
+        }
+        add(new Wall(100,100,240,40));
+    }
+
+    private void initColliders() {
+        String collidersStr = ConfigUtil.getStr("object.collider.chain");
+        if (StrUtil.isNotBlank(collidersStr)) {
+            List<String> strs = StrUtil.split(collidersStr, ",");
+            colliders = new ArrayList<>(strs.size());
+            for (String str : strs) {
+                colliders.add(ReflectUtil.newInstance(str));
+            }
+        }
+    }
+
+    public void add(GameObject go){
+        objects.add(go);
+    }
+
+    public void remove(GameObject go){
+        objects.remove(go);
+    }
+
     @Override
     public void paint(Graphics g) {
         try {
-            Color c = g.getColor();
-            g.setColor(Color.WHITE);
-            g.drawString("bullets: " + bullets.size(), 10, 45);
-            g.drawString("enymies: " + tanks.size(), 10, 60);
-            g.setColor(c);
-
             myTank.paint(g);
-            for (Tank tank : tanks) {
-                tank.paint(g);
-            }
-            for (int i = 0; i < bullets.size(); i++) {
-                Bullet b = bullets.get(i);
-                for (int i1 = 0; i1 < tanks.size(); i1++) {
-                    b.collideWith(tanks.get(i1));
-                }
-                if (b.isLiving()) {
-                    bullets.get(i).paint(g);
-                }
-            }
 
-            for (int i = 0; i < explodes.size(); i++) {
-                Explode b = explodes.get(i);
-                b.paint(g);
+            for (int i = 0; i < objects.size(); i++) {
+                GameObject go = objects.get(i);
+                if (CollUtil.isNotEmpty(colliders)) {
+                    for (int i1 = i + 1; i1 < objects.size(); i1++) {
+                        GameObject go1 = objects.get(i1);
+                        for (Collider c : colliders) {
+                            c.collide(go, go1);
+                        }
+                    }
+                }
+                go.paint(g);
             }
         } catch (IOException e) {
-            log.error("坦克绘制异常：", e);
+            log.error("TankFrame绘制异常：", e);
         }
     }
 
     /**
      * 用于解决图形闪烁问题。现在内存中画好图形，再让显卡一次性加载到现存中显示。
      * 如果把图形一点点传给显存，就会出现图片一点点刷新，也就是闪烁问题。
-     *
      * @param g Graphics 显卡的画笔
      */
     @Override
