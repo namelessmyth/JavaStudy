@@ -15,14 +15,14 @@ import com.sjj.mashibing.tank.pattern.gameObj.Wall;
 public class TankWallCollider implements Collider{
     @Override
     public boolean collide(GameObject go1, GameObject go2) {
-        if (go1 instanceof Tank && go2 instanceof Wall) {
-            Tank t = (Tank) go1;
-            Wall w = (Wall) go2;
-            if (t.getRect().intersects(w.getRect())) {
-                t.back();
+        if (go1.isLiving() && go2.isLiving()) {
+            if (go1 instanceof Tank && go2 instanceof Wall) {
+                if (go1.getRect().intersects(go2.getRect())) {
+                    ((Tank) go1).back();
+                }
+            } else if (go1 instanceof Wall && go2 instanceof Tank) {
+                collide(go2, go1);
             }
-        } else if (go1 instanceof Wall && go2 instanceof Tank) {
-            collide(go2, go1);
         }
         return true;
     }

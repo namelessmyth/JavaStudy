@@ -14,10 +14,12 @@ import com.sjj.mashibing.tank.pattern.gameObj.GameObject;
 public class BulletTankCollider implements Collider{
     @Override
     public boolean collide(GameObject go1, GameObject go2) {
-        if (go1 instanceof Tank && go2 instanceof Bullet) {
-            return ((Bullet) go2).collideWith((Tank) go1);
-        } else if (go1 instanceof Bullet && go2 instanceof Tank) {
-            return ((Bullet) go1).collideWith((Tank) go2);
+        if (go1.isLiving() && go2.isLiving()) {
+            if (go1 instanceof Tank && go2 instanceof Bullet) {
+                return ((Bullet) go2).collideWith((Tank) go1);
+            } else if (go1 instanceof Bullet && go2 instanceof Tank) {
+                return ((Bullet) go1).collideWith((Tank) go2);
+            }
         }
         return true;
     }

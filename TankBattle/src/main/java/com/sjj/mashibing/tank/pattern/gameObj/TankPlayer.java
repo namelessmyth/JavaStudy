@@ -31,7 +31,6 @@ public class TankPlayer extends GameObject {
     private final static int SPEED = 5;
     private Dir dir = Dir.DOWN;
     private boolean moving = false;
-    private boolean living = true;
     private Group group = Group.GOOD;
     public static int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
@@ -166,7 +165,7 @@ public class TankPlayer extends GameObject {
     }
 
     public void die() {
-        this.living = false;
+        super.die();
         int eX = this.getX() + TankPlayer.WIDTH / 2 - Explode.WIDTH / 2;
         int eY = this.getY() + TankPlayer.HEIGHT / 2 - Explode.HEIGHT / 2;
         TankFrame.INSTANCE.add(new Explode(getX(), getY()));

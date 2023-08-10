@@ -1,5 +1,6 @@
 package com.sjj.mashibing.tank.pattern.gameObj;
 
+import com.sjj.mashibing.tank.pattern.TankFrame;
 import lombok.Data;
 import lombok.ToString;
 
@@ -37,4 +38,21 @@ public abstract class GameObject {
     private Rectangle rect = new Rectangle();
 
     public abstract void paint(Graphics g) throws IOException;
+
+    public void die() {
+        setLiving(false);
+        TankFrame.INSTANCE.remove(this);
+        /*
+        log.info("this bullet is die. size of bullet:{}, this:{}", CollUtil.count(TankFrame.INSTANCE.objects,
+                new Matcher<GameObject>() {
+                    @Override
+                    public boolean match(GameObject gameObject) {
+                        if (gameObject instanceof Bullet) {
+                            return true;
+                        }
+                        return false;
+                    }
+                }), this);
+         */
+    }
 }

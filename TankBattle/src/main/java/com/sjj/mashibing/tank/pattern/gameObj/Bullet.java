@@ -23,8 +23,6 @@ public class Bullet extends GameObject {
     public static int HEIGHT = ResourceMgr.bulletD.getHeight();
     private UUID playerId;
     private Dir dir;
-    //判断字段是否活着（超出边界）
-    private boolean living = true;
     private Group group = Group.BAD;
 
     public Bullet(UUID playerId, int x, int y, Dir dir, Group group) {
@@ -38,22 +36,6 @@ public class Bullet extends GameObject {
         this.group = group;
 
         updateRect();
-    }
-
-    public void die() {
-        this.living = false;
-        TankFrame.INSTANCE.remove(this);
-        //log.info("this bullet is die:{}", this);
-        log.info("this bullet is die. size of bullet:{}, this:{}", CollUtil.count(TankFrame.INSTANCE.objects,
-                new Matcher<GameObject>() {
-                    @Override
-                    public boolean match(GameObject gameObject) {
-                        if (gameObject instanceof Bullet) {
-                            return true;
-                        }
-                        return false;
-                    }
-                }), this);
     }
 
     private void move() {
@@ -81,8 +63,7 @@ public class Bullet extends GameObject {
      */
     public void boundCheck() {
         if (getX() < 0 || getX() > TankFrame.GAME_WIDTH || getY() < 30 || getY() > TankFrame.GAME_HEIGHT) {
-            living = false;
-            TankFrame.INSTANCE.remove(this);
+            this.die();
         }
     }
 

@@ -29,7 +29,6 @@ public class Tank extends GameObject {
     private final static int SPEED = 5;
     private Dir dir = Dir.DOWN;
     private boolean moving = true;
-    private boolean living = true;
     private Group group = Group.BAD;
     private Random random = new Random();
     public static int WIDTH = ResourceMgr.goodTankU.getWidth();
@@ -124,10 +123,9 @@ public class Tank extends GameObject {
     }
 
     public void die() {
-        this.living = false;
+        super.die();
         int eX = this.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
         int eY = this.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-        TankFrame.INSTANCE.remove(this);
         TankFrame.INSTANCE.add(new Explode(getX(), getY()));
         log.info("this tank is die. size of tanks:{}, this:{}", CollUtil.count(TankFrame.INSTANCE.objects,
                 new Matcher<GameObject>() {

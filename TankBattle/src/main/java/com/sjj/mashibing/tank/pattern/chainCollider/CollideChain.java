@@ -30,12 +30,14 @@ public class CollideChain implements Collider{
     }
 
     private void initColliders() {
-        String collidersStr = ConfigUtil.getStr("object.collider.chain");
-        if (StrUtil.isNotBlank(collidersStr)) {
-            List<String> strs = StrUtil.split(collidersStr, ",");
+        String collidersPackage = ConfigUtil.getStr("object.collider.chain.package",
+                "com.sjj.mashibing.tank.pattern.chainCollider");
+        String collidersClass = ConfigUtil.getStr("object.collider.chain.class");
+        if (StrUtil.isNotBlank(collidersClass)) {
+            List<String> strs = StrUtil.split(collidersClass, ",");
             colliders = new ArrayList<>(strs.size());
-            for (String str : strs) {
-                colliders.add(ReflectUtil.newInstance(str));
+            for (String clazz : strs) {
+                colliders.add(ReflectUtil.newInstance(String.join(".", collidersPackage, clazz)));
             }
         }
         log.info("init Collider is over.{}", colliders);

@@ -33,6 +33,7 @@ public class TankFrame extends Frame {
     public static final int GAME_WIDTH = ConfigUtil.getInt("frame.main.width");
     public static final int GAME_HEIGHT = ConfigUtil.getInt("frame.main.height");
     public static final int ENEMY_SIZE = ConfigUtil.getInt("tank.enemy.size");
+
     Random r = new Random();
     Image offScreenImage = null;
     TankPlayer myTank;
@@ -54,9 +55,11 @@ public class TankFrame extends Frame {
     }
 
     private void initGameObjects() {
-        myTank = new TankPlayer(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD);
-
         objects = new ArrayList<>();
+
+        myTank = new TankPlayer(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD);
+        add(myTank);
+
         int gap = GAME_WIDTH / ENEMY_SIZE;
         for (int i = 0; i < ENEMY_SIZE; i++) {
             Tank tank = new Tank(gap * i, 30, Dir.DOWN, Group.BAD);
@@ -76,7 +79,10 @@ public class TankFrame extends Frame {
     @Override
     public void paint(Graphics g) {
         try {
-            myTank.paint(g);
+            Color c = g.getColor();
+            g.setColor(Color.WHITE);
+            g.drawString("objects: " + objects.size(), 10, 45);
+            g.setColor(c);
 
             for (int i = 0; i < objects.size(); i++) {
                 GameObject go = objects.get(i);
