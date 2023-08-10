@@ -60,6 +60,7 @@ public class TankPlayer extends GameObject {
      *
      * @param g
      */
+    @Override
     public void paint(Graphics g) throws IOException {
         if (!isLiving()) {
             return;

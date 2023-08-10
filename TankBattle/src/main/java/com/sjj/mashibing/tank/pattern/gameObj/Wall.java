@@ -23,6 +23,8 @@ public class Wall extends GameObject {
         setY(y);
         setW(w);
         setH(h);
+
+        updateRect();
     }
 
     @Override
@@ -31,5 +33,12 @@ public class Wall extends GameObject {
         g.setColor(Color.gray);
         g.fillRect(getX(), getY(), getW(), getH());
         g.setColor(c);
+    }
+
+    public void updateRect(){
+        getRect().x = getX();
+        getRect().y = getY();
+        getRect().width = getW();
+        getRect().height = getH();
     }
 }

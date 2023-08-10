@@ -27,6 +27,7 @@ public class Explode extends GameObject {
         new Thread(() -> new Audio("audio/explode.wav").play()).start();
     }
 
+    @Override
     public void paint(Graphics g) {
         g.drawImage(ResourceMgr.explodes[step++], getX(), getY(), null);
         if (step >= ResourceMgr.explodes.length) {

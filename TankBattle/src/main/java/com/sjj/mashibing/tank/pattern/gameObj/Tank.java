@@ -1,5 +1,7 @@
 package com.sjj.mashibing.tank.pattern.gameObj;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Matcher;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
 import com.sjj.mashibing.tank.pattern.TankFrame;
@@ -42,11 +44,7 @@ public class Tank extends GameObject {
         this.dir = dir;
         this.group = group;
 
-        setRect(new Rectangle());
-        getRect().x = getX();
-        getRect().y = getY();
-        getRect().width = WIDTH;
-        getRect().height = HEIGHT;
+        updateRect();
     }
 
     /**
@@ -54,6 +52,7 @@ public class Tank extends GameObject {
      *
      * @param g
      */
+    @Override
     public void paint(Graphics g) throws IOException {
         if (!isLiving()) {
             return;
@@ -102,6 +101,8 @@ public class Tank extends GameObject {
         }
 
         if (boundCheck(xNew, yNew)) {
+            setXo(getX());
+            setYo(getY());
             setX(xNew);
             setY(yNew);
             updateRect();
@@ -120,9 +121,6 @@ public class Tank extends GameObject {
         Bullet b = new Bullet(getId(), bX, bY, this.dir, this.group);
 
         TankFrame.INSTANCE.add(b);
-
-        //Client.INSTANCE.send(new BulletNewMsg(b));
-        //if(this.group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
     }
 
     public void die() {
@@ -131,7 +129,16 @@ public class Tank extends GameObject {
         int eY = this.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
         TankFrame.INSTANCE.remove(this);
         TankFrame.INSTANCE.add(new Explode(getX(), getY()));
-        log.info("this tank is die.{}", this);
+        log.info("this tank is die. size of tanks:{}, this:{}", CollUtil.count(TankFrame.INSTANCE.objects,
+                new Matcher<GameObject>() {
+                    @Override
+                    public boolean match(GameObject gameObject) {
+                        if (gameObject instanceof Tank) {
+                            return true;
+                        }
+                        return false;
+                    }
+                }), this);
     }
 
     /**
@@ -144,14 +151,16 @@ public class Tank extends GameObject {
         return true;
     }
 
-    /**
-     * 更新坦克的长方形坐标
-     */
     public void updateRect() {
         getRect().x = getX();
         getRect().y = getY();
+        getRect().width = getW();
+        getRect().height = getH();
     }
 
-    public void collideWith(Wall go1) {
+    public void back() {
+        setX(getXo());
+        setY(getYo());
+        updateRect();
     }
 }

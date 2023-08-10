@@ -24,6 +24,14 @@ public abstract class GameObject {
      */
     private int x, y, w, h;
     /**
+     * 老的坐标，长宽。用于back方法
+     */
+    private int xo, yo, wo, ho;
+    /**
+     * 判断字段是否活着（超出边界）
+     */
+    private boolean living = true;
+    /**
      * 对象长方形，用于碰撞检测
      */
     private Rectangle rect = new Rectangle();

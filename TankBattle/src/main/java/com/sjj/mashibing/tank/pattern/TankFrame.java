@@ -1,12 +1,12 @@
 package com.sjj.mashibing.tank.pattern;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
-import com.sjj.mashibing.tank.pattern.chain.Collider;
+import com.sjj.mashibing.tank.pattern.chainCollider.CollideChain;
+import com.sjj.mashibing.tank.pattern.chainCollider.Collider;
 import com.sjj.mashibing.tank.pattern.gameObj.GameObject;
 import com.sjj.mashibing.tank.pattern.gameObj.Tank;
 import com.sjj.mashibing.tank.pattern.gameObj.TankPlayer;
@@ -37,7 +37,7 @@ public class TankFrame extends Frame {
     Image offScreenImage = null;
     TankPlayer myTank;
     public List<GameObject> objects;
-    public List<Collider> colliders;
+    CollideChain collideChain = new CollideChain();
 
     public static final TankFrame INSTANCE = new TankFrame();
 
@@ -50,7 +50,6 @@ public class TankFrame extends Frame {
         this.addKeyListener(new TankKeyListener());
 
         initGameObjects();
-        initColliders();
         log.info("tank war Main frame initialization completed");
     }
 
@@ -63,25 +62,14 @@ public class TankFrame extends Frame {
             Tank tank = new Tank(gap * i, 30, Dir.DOWN, Group.BAD);
             add(tank);
         }
-        add(new Wall(100,100,240,40));
+        add(new Wall(300, 300, 240, 40));
     }
 
-    private void initColliders() {
-        String collidersStr = ConfigUtil.getStr("object.collider.chain");
-        if (StrUtil.isNotBlank(collidersStr)) {
-            List<String> strs = StrUtil.split(collidersStr, ",");
-            colliders = new ArrayList<>(strs.size());
-            for (String str : strs) {
-                colliders.add(ReflectUtil.newInstance(str));
-            }
-        }
-    }
-
-    public void add(GameObject go){
+    public void add(GameObject go) {
         objects.add(go);
     }
 
-    public void remove(GameObject go){
+    public void remove(GameObject go) {
         objects.remove(go);
     }
 
@@ -92,12 +80,14 @@ public class TankFrame extends Frame {
 
             for (int i = 0; i < objects.size(); i++) {
                 GameObject go = objects.get(i);
-                if (CollUtil.isNotEmpty(colliders)) {
-                    for (int i1 = i + 1; i1 < objects.size(); i1++) {
-                        GameObject go1 = objects.get(i1);
-                        for (Collider c : colliders) {
-                            c.collide(go, go1);
-                        }
+                if (!go.isLiving()) {
+                    //如果在上一次碰撞中已经die则不处理。
+                    continue;
+                }
+                for (int i1 = i + 1; i1 < objects.size(); i1++) {
+                    GameObject go1 = objects.get(i1);
+                    if (!collideChain.collide(go, go1)) {
+                        break;
                     }
                 }
                 go.paint(g);
@@ -110,6 +100,7 @@ public class TankFrame extends Frame {
     /**
      * 用于解决图形闪烁问题。现在内存中画好图形，再让显卡一次性加载到现存中显示。
      * 如果把图形一点点传给显存，就会出现图片一点点刷新，也就是闪烁问题。
+     *
      * @param g Graphics 显卡的画笔
      */
     @Override
