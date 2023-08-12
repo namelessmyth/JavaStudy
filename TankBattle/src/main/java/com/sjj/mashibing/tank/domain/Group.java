@@ -1,5 +1,7 @@
 package com.sjj.mashibing.tank.domain;
 
-public enum Group {
+import java.io.Serializable;
+
+public enum Group implements Serializable {
 	GOOD, BAD
 }

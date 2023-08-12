@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Random;
 import java.util.UUID;
 
@@ -23,7 +24,9 @@ import java.util.UUID;
 @Slf4j
 @ToString(exclude = {"tf", "rect"})
 @NoArgsConstructor
-public class Tank {
+public class Tank implements Serializable {
+    private static final long serialVersionUID = -6769165843909008043L;
+
     private UUID id = UUID.randomUUID();
     private int x = 100;
     private int y = 100;

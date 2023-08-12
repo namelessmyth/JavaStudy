@@ -168,7 +168,7 @@ public class TankPlayer extends GameObject {
         super.die();
         int eX = this.getX() + TankPlayer.WIDTH / 2 - Explode.WIDTH / 2;
         int eY = this.getY() + TankPlayer.HEIGHT / 2 - Explode.HEIGHT / 2;
-        TankFrame.INSTANCE.add(new Explode(getX(), getY()));
+        TankFrame.INSTANCE.getGm().add(new Explode(eX, eY));
         log.info("this tank is die.{}", this);
     }
 

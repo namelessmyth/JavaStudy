@@ -5,6 +5,8 @@ import com.sjj.mashibing.tank.pattern.gameObj.GameObject;
 import com.sjj.mashibing.tank.pattern.gameObj.Tank;
 import com.sjj.mashibing.tank.pattern.gameObj.Wall;
 
+import java.io.Serializable;
+
 /**
  * 子弹和墙相撞实现类<br>
  *
@@ -12,7 +14,9 @@ import com.sjj.mashibing.tank.pattern.gameObj.Wall;
  * @version 1.0
  * @date 2023/8/9
  */
-public class BulletWallCollider implements Collider {
+public class BulletWallCollider implements Collider, Serializable {
+    private static final long serialVersionUID = -628825636775459260L;
+
     /**
      * 子弹撞墙就die
      * @param go1

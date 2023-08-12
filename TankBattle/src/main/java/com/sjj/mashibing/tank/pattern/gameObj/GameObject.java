@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -17,7 +18,9 @@ import java.util.UUID;
  */
 @Data
 @ToString
-public abstract class GameObject {
+public abstract class GameObject implements Serializable {
+    private static final long serialVersionUID = -3904887825785332240L;
+
     private UUID id = UUID.randomUUID();
     private UUID playerId;
     /**
@@ -41,7 +44,7 @@ public abstract class GameObject {
 
     public void die() {
         setLiving(false);
-        TankFrame.INSTANCE.remove(this);
+        TankFrame.INSTANCE.getGm().remove(this);
         /*
         log.info("this bullet is die. size of bullet:{}, this:{}", CollUtil.count(TankFrame.INSTANCE.objects,
                 new Matcher<GameObject>() {

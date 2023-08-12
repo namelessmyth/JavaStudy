@@ -17,7 +17,7 @@ public class Fire2Dir implements FireStrategy {
         //根据坦克坐标计算子弹坐标，使子弹出现在坦克中部。
         int bX = tank.getX() + TankPlayer.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = tank.getY() + TankPlayer.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        TankFrame.INSTANCE.add(new Bullet(tank.getId(), bX, bY, tank.getDir(), tank.getGroup()));
-        TankFrame.INSTANCE.add(new Bullet(tank.getId(), bX, bY, tank.getDir().getOpposite(), tank.getGroup()));
+        TankFrame.INSTANCE.getGm().add(new Bullet(tank.getId(), bX, bY, tank.getDir(), tank.getGroup()));
+        TankFrame.INSTANCE.getGm().add(new Bullet(tank.getId(), bX, bY, tank.getDir().getOpposite(), tank.getGroup()));
     }
 }

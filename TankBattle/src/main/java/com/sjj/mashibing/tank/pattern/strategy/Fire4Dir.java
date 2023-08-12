@@ -19,7 +19,7 @@ public class Fire4Dir implements FireStrategy {
         int bX = tank.getX() + TankPlayer.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = tank.getY() + TankPlayer.HEIGHT / 2 - Bullet.HEIGHT / 2;
         for (Dir d : Dir.values()) {
-            TankFrame.INSTANCE.add(new Bullet(tank.getId(), bX, bY, d, tank.getGroup()));
+            TankFrame.INSTANCE.getGm().add(new Bullet(tank.getId(), bX, bY, d, tank.getGroup()));
         }
     }
 }

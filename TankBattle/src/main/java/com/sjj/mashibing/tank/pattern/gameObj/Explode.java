@@ -32,7 +32,7 @@ public class Explode extends GameObject {
         g.drawImage(ResourceMgr.explodes[step++], getX(), getY(), null);
         if (step >= ResourceMgr.explodes.length) {
             log.info("explosion occurred ... {}", this);
-            TankFrame.INSTANCE.objects.remove(this);
+            TankFrame.INSTANCE.getGm().getObjects().remove(this);
         }
     }
 

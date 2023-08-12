@@ -119,15 +119,15 @@ public class Tank extends GameObject {
         int bY = getY() + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
         Bullet b = new Bullet(getId(), bX, bY, this.dir, this.group);
 
-        TankFrame.INSTANCE.add(b);
+        TankFrame.INSTANCE.getGm().add(b);
     }
 
     public void die() {
         super.die();
         int eX = this.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
         int eY = this.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-        TankFrame.INSTANCE.add(new Explode(getX(), getY()));
-        log.info("this tank is die. size of tanks:{}, this:{}", CollUtil.count(TankFrame.INSTANCE.objects,
+        TankFrame.INSTANCE.getGm().add(new Explode(eX, eY));
+        log.info("this tank is die. size of tanks:{}, this:{}", CollUtil.count(TankFrame.INSTANCE.getGm().getObjects(),
                 new Matcher<GameObject>() {
                     @Override
                     public boolean match(GameObject gameObject) {

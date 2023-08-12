@@ -8,6 +8,7 @@ import com.sjj.mashibing.tank.util.ConfigUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,8 @@ import java.util.List;
  */
 @Slf4j
 @Data
-public class CollideChain implements Collider{
+public class CollideChain implements Collider, Serializable {
+    private static final long serialVersionUID = 4969532920556755864L;
     private List<Collider> colliders;
 
     public CollideChain() {

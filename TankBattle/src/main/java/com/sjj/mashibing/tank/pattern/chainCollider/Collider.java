@@ -2,6 +2,8 @@ package com.sjj.mashibing.tank.pattern.chainCollider;
 
 import com.sjj.mashibing.tank.pattern.gameObj.GameObject;
 
+import java.io.Serializable;
+
 /**
  * 接口功能说明<br>
  *
@@ -9,7 +11,7 @@ import com.sjj.mashibing.tank.pattern.gameObj.GameObject;
  * @version 1.0
  * @date 2023/8/9
  */
-public interface Collider {
+public interface Collider extends Serializable {
     /**
      * 碰撞方法
      * @param go1

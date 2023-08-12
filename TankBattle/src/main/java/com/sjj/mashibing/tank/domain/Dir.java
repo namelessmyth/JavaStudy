@@ -1,5 +1,6 @@
 package com.sjj.mashibing.tank.domain;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -9,8 +10,8 @@ import java.util.Random;
  */
 public enum Dir {
     LEFT, RIGHT, UP, DOWN;
-    static Random random = new Random();
 
+    static Random random = new Random();
     public static Dir random() {
         return values()[random.nextInt(values().length)];
     }
