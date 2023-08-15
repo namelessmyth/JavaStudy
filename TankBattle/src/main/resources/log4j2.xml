@@ -15,12 +15,13 @@
         <property name="LOG_HOME">${web:rootDir}/WEB-INF/logs</property>
     </properties>
 
+    <!-- 日志打印输出方式 -->
     <Appenders>
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout charset="UTF-8" Pattern ="${LOG_PATTERN}" />
         </Console>
 
-        <RollingFile name="SjjLog" fileName="logs/${PROJECT_NAME}.log" filePattern="logs/${PROJECT_NAME}-%d_%i.log">
+        <RollingFile name="FileLog" fileName="logs/${PROJECT_NAME}.log" filePattern="logs/${PROJECT_NAME}-%d_%i.log">
             <PatternLayout charset="UTF-8" Pattern ="${LOG_PATTERN}" />
             <Policies>
                 <!-- 每天生成一个，同时如果超过10MB还会再生成 -->
@@ -31,22 +32,23 @@
         </RollingFile>
     </Appenders>
 
+    <!-- 将代码路径与上面的日志打印关联起来 -->
     <Loggers>
-        <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
         <!-- 当前项目日志 -->
         <Logger name="com.sjj" level="INFO" additivity="false">
             <AppenderRef ref="STDOUT"/>
-            <AppenderRef ref="SjjLog"/>
+            <AppenderRef ref="FileLog"/>
         </Logger>
 
-        <!-- 第三方项目日志 -->
+        <!-- 第三方依赖项目日志 -->
         <logger name="org.springframework" level="info"/>
         <logger name="org.jboss.netty" level="warn"/>
 
-        <!-- 根节点日志 -->
+        <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+        <!-- 根节点日志，除了上面配置的之外的日志 -->
         <Root level="WARN">
             <AppenderRef ref="STDOUT"/>
-            <AppenderRef ref="SjjLog"/>
+            <AppenderRef ref="FileLog"/>
         </Root>
     </Loggers>
 </Configuration>

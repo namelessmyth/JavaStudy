@@ -78,11 +78,11 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter { //SimpleChannleI
 			String s = new String(bytes);
 			
 			if(s.equals("_bye_")) {
-				System.out.println("¿Í»§¶ËÒªÇóÍË³ö");
-				Server.clients.remove(ctx.channel());
+				System.out.println("ï¿½Í»ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ë³ï¿½");
+				ServerSimple.clients.remove(ctx.channel());
 				ctx.close();
 			} else {
-				Server.clients.writeAndFlush(msg);
+				ServerSimple.clients.writeAndFlush(msg);
 			}*/
 			
 			//System.out.println(buf);
@@ -96,7 +96,7 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter { //SimpleChannleI
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		cause.printStackTrace();
-		//É¾³ý³öÏÖÒì³£µÄ¿Í»§¶Ëchannle£¬²¢¹Ø±ÕÁ¬½Ó
+		//É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½Ä¿Í»ï¿½ï¿½ï¿½channleï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½
 		Server.clients.remove(ctx.channel());
 		ctx.close();
 	}
