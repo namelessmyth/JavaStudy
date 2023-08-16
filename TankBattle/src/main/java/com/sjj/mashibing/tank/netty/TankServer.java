@@ -1,6 +1,7 @@
-package com.sjj.mashibing.chatroom;
+package com.sjj.mashibing.tank.netty;
 
 import cn.hutool.core.util.StrUtil;
+import com.sjj.mashibing.chatroom.ServerFrame;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
@@ -9,17 +10,16 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
-public class ChatServer {
+public class TankServer {
     static ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
-    public static void start(){
+    public static void start() {
         //总管线程组
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         //接待员线程
@@ -36,10 +36,11 @@ public class ChatServer {
                 @Override
                 protected void initChannel(SocketChannel sc) throws Exception {
                     log.info("a client connected:{}", sc);
-                    sc.pipeline().addLast(new MyChildHandler());
+                    sc.pipeline().addLast(new TankMsgDecoder())
+                            .addLast(new MyChildHandler());
                 }
             });
-            log.info("chat server has been started");
+            log.info("server has been started");
             ChannelFuture cf = b.bind(8888).sync();
             cf.channel().closeFuture().sync();
         } catch (Exception e) {
@@ -56,8 +57,8 @@ public class ChatServer {
 class MyChildHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ServerFrame.INSTANCE.updateClient("client connected:"+ctx.channel().remoteAddress());
-        ChatServer.clients.add(ctx.channel());
+        ServerFrame.INSTANCE.updateClient("client connected:" + ctx.channel().remoteAddress());
+        TankServer.clients.add(ctx.channel());
     }
 
     /**
@@ -68,17 +69,11 @@ class MyChildHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf buf = (ByteBuf) msg;
-        String str = buf.toString(StandardCharsets.UTF_8);
-        log.info("channelRead().input,string:{},buf:{}", str, buf);
-        if (StrUtil.equalsIgnoreCase(str, "__88__")) {
-            ChatServer.clients.remove(ctx.channel());
-            ctx.close();
-            ServerFrame.INSTANCE.updateClient("client closed>"+ctx.channel().remoteAddress());
-            log.info("The chat client has been closed:{}", ctx.channel());
-        } else {
-            ChatServer.clients.writeAndFlush(msg);
-            ServerFrame.INSTANCE.updateMsg(ctx.channel().remoteAddress() + ">" + str);
+        TankMsg buf = (TankMsg) msg;
+        log.info("channelRead().input:{}", buf);
+        if (buf != null) {
+            TankServer.clients.writeAndFlush(msg);
+            ServerFrame.INSTANCE.updateMsg(ctx.channel().remoteAddress() + ">" + msg);
             log.info("TankServer.clients.writeAndFlush:{}", msg);
         }
     }
@@ -93,7 +88,7 @@ class MyChildHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.error("TankServer.exceptionCaught:", cause);
-        ChatServer.clients.remove(ctx.channel());
+        TankServer.clients.remove(ctx.channel());
         ctx.close();
     }
 }

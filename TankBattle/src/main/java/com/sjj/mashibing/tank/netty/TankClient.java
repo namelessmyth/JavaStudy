@@ -1,5 +1,6 @@
-package com.sjj.mashibing.chatroom;
+package com.sjj.mashibing.tank.netty;
 
+import com.sjj.mashibing.chatroom.ChatFrame;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -19,9 +20,12 @@ import java.nio.charset.StandardCharsets;
  * @date 2023/8/13
  */
 @Slf4j
-public class ChatClient {
+public class TankClient {
     private static SocketChannel channel;
 
+    public static void main(String[] args) {
+        connect();
+    }
     /**
      * 与服务端建立连接的方法
      */
@@ -35,15 +39,16 @@ public class ChatClient {
                 @Override
                 protected void initChannel(SocketChannel ch) throws Exception {
                     channel = ch;
-                    ch.pipeline().addLast(new MyClientHandler());
+                    ch.pipeline().addLast(new TankMsgEncoder())
+                            .addLast(new MyClientHandler());
                 }
             });
             ChannelFuture cf = b.connect("localhost", 8888).sync();
             //直到服务器被关闭，否则一直阻塞。
             cf.channel().closeFuture().sync();
-            log.info("the chat client has been closed.");
+            log.info("the client has been closed.");
         } catch (Exception e) {
-            log.error("ChatClient.connect.Exception.", e);
+            log.error("connect.Exception.", e);
         } finally {
             group.shutdownGracefully();
         }
@@ -51,6 +56,7 @@ public class ChatClient {
 
     /**
      * 向服务端发送聊天消息的方法
+     *
      * @param msg 聊天内容
      */
     public static void send(String msg) {
@@ -71,13 +77,13 @@ public class ChatClient {
 class MyClientHandler extends ChannelInboundHandlerAdapter {
     /**
      * 读取服务端数据
+     *
      * @param msg 服务端数据
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf buf = (ByteBuf) msg;
         String text = buf.toString(StandardCharsets.UTF_8);
-        ChatFrame.INSTANCE.updateText(text);
         log.info("channelRead.msg:{}", text);
     }
 
@@ -86,6 +92,7 @@ class MyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        ctx.writeAndFlush(new TankMsg(123, 23));
         log.info("connected to server.");
     }
 

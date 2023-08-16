@@ -1,4 +1,4 @@
-package com.sjj.mashibing.tank.netty;
+package com.sjj.mashibing.netty.simple;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;

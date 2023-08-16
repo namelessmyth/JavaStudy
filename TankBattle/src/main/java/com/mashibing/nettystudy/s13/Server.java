@@ -79,10 +79,10 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter { //SimpleChannleI
 			
 			if(s.equals("_bye_")) {
 				System.out.println("�ͻ���Ҫ���˳�");
-				ServerSimple.clients.remove(ctx.channel());
+				TankServer.clients.remove(ctx.channel());
 				ctx.close();
 			} else {
-				ServerSimple.clients.writeAndFlush(msg);
+				TankServer.clients.writeAndFlush(msg);
 			}*/
 			
 			//System.out.println(buf);

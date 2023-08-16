@@ -1,10 +1,6 @@
 package com.sjj.mashibing.chatroom;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.LineSeparator;
-import com.mashibing.nettystudy.s05.Client;
-import com.sjj.mashibing.tank.pattern.GameModel;
-import com.sjj.mashibing.tank.pattern.TankFrame;
 import com.sjj.mashibing.tank.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Random;
 
 /**
  * 类功能说明<br>
@@ -31,11 +26,16 @@ public class ChatFrame extends Frame {
 
     public static final ChatFrame INSTANCE = new ChatFrame();
 
+    public static void main(String[] args) throws Exception {
+        INSTANCE.setVisible(true);
+        ChatClient.connect();
+    }
+
     private ChatFrame() throws HeadlessException {
         //创建游戏的主Frame
         this.setTitle("chat room");
         this.setSize(GAME_WIDTH, GAME_HEIGHT);
-        this.setLocation(400, 100);
+        this.setLocation(800, 100);
         this.add(ta, BorderLayout.CENTER);
         this.add(tf, BorderLayout.SOUTH);
 
@@ -58,11 +58,6 @@ public class ChatFrame extends Frame {
     }
 
     public void updateText(String text) {
-        ta.setText(ta.getText() + LineSeparator.WINDOWS.getValue() + text);
-    }
-
-    public static void main(String[] args) throws Exception {
-        INSTANCE.setVisible(true);
-        ChatClient.connect();
+        ta.setText(ta.getText() + Constants.LINE_SEPERATOR + text);
     }
 }
