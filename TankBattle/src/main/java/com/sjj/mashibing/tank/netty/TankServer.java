@@ -1,9 +1,6 @@
 package com.sjj.mashibing.tank.netty;
 
-import cn.hutool.core.util.StrUtil;
-import com.sjj.mashibing.chatroom.ServerFrame;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
@@ -12,8 +9,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class TankServer {
@@ -42,13 +37,14 @@ public class TankServer {
             });
             log.info("server has been started");
             ChannelFuture cf = b.bind(8888).sync();
+            //阻塞，不然会直接执行完。
             cf.channel().closeFuture().sync();
         } catch (Exception e) {
             log.error("TankServer.exception", e);
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
-            log.info("chat server has been closed");
+            log.info("server has been closed");
         }
     }
 }
@@ -72,8 +68,8 @@ class MyChildHandler extends ChannelInboundHandlerAdapter {
         TankMsg buf = (TankMsg) msg;
         log.info("channelRead().input:{}", buf);
         if (buf != null) {
-            TankServer.clients.writeAndFlush(msg);
             ServerFrame.INSTANCE.updateMsg(ctx.channel().remoteAddress() + ">" + msg);
+            TankServer.clients.writeAndFlush(msg);
             log.info("TankServer.clients.writeAndFlush:{}", msg);
         }
     }

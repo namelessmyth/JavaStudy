@@ -7,6 +7,7 @@ import cn.hutool.core.io.file.PathUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.SerializeUtil;
 import cn.hutool.core.util.StrUtil;
+import com.sjj.mashibing.chatroom.Constants;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
 import com.sjj.mashibing.tank.pattern.chainCollider.CollideChain;
@@ -35,10 +36,7 @@ import java.util.Random;
  */
 @Slf4j
 @Data
-public class TankFrame extends Frame {
-    public static final int GAME_WIDTH = ConfigUtil.getInt("frame.main.width");
-    public static final int GAME_HEIGHT = ConfigUtil.getInt("frame.main.height");
-
+public class TankFrame extends Frame implements Constants {
     Random r = new Random();
     Image offScreenImage = null;
     GameModel gm;

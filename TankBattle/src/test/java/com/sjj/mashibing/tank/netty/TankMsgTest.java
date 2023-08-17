@@ -1,5 +1,7 @@
 package com.sjj.mashibing.tank.netty;
 
+import com.sjj.mashibing.tank.domain.Dir;
+import com.sjj.mashibing.tank.pattern.gameObj.TankPlayer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
@@ -13,14 +15,21 @@ class TankMsgTest {
     void encode() {
         EmbeddedChannel channel = new EmbeddedChannel();
         channel.pipeline().addLast(new TankMsgEncoder());
-        //模拟出站数据
-        channel.writeOutbound(new TankMsg(123, 34));
+
+        TankPlayer player = new TankPlayer(20, 30);
+        //模拟数据出站
+        channel.writeOutbound(new TankMsg(player));
         //读取刚刚写出去的数据
         ByteBuf buf = channel.readOutbound();
+
+        int length = buf.readInt();
+        assertEquals(33, length);
+
         int x = buf.readInt();
         int y = buf.readInt();
+        assertEquals(20, x);
+        assertEquals(30, y);
 
-        assertEquals(x, 123);
     }
 
     @Test

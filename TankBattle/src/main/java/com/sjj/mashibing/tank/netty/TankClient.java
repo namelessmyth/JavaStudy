@@ -1,16 +1,12 @@
 package com.sjj.mashibing.tank.netty;
 
-import com.sjj.mashibing.chatroom.ChatFrame;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * 类功能说明<br>
@@ -40,6 +36,7 @@ public class TankClient {
                 protected void initChannel(SocketChannel ch) throws Exception {
                     channel = ch;
                     ch.pipeline().addLast(new TankMsgEncoder())
+                            .addLast(new TankMsgDecoder())
                             .addLast(new MyClientHandler());
                 }
             });
@@ -82,9 +79,8 @@ class MyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf buf = (ByteBuf) msg;
-        String text = buf.toString(StandardCharsets.UTF_8);
-        log.info("channelRead.msg:{}", text);
+        TankMsg t = (TankMsg) msg;
+        log.info("channelRead.msg:{}", t);
     }
 
     /**
@@ -92,7 +88,7 @@ class MyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ctx.writeAndFlush(new TankMsg(123, 23));
+        ctx.writeAndFlush(new TankMsg(TankFrame.INSTANCE.getGm().getMyTank()));
         log.info("connected to server.");
     }
 
@@ -101,7 +97,7 @@ class MyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("chat client exceptionCaught:", cause);
+        log.error("client exceptionCaught:", cause);
         super.exceptionCaught(ctx, cause);
     }
 }

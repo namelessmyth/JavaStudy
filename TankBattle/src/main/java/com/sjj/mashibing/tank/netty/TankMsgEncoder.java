@@ -14,7 +14,8 @@ import io.netty.handler.codec.MessageToByteEncoder;
 public class TankMsgEncoder extends MessageToByteEncoder<TankMsg> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, TankMsg tankMsg, ByteBuf byteBuf) throws Exception {
-        byteBuf.writeInt(tankMsg.getX());
-        byteBuf.writeInt(tankMsg.getY());
+        byte [] bs = tankMsg.toBytes();
+        byteBuf.writeInt(bs.length);
+        byteBuf.writeBytes(bs);
     }
 }

@@ -37,6 +37,21 @@ public class TankPlayer extends GameObject {
 
     private FireStrategy fireStrategy;
 
+    public TankPlayer(int x, int y) {
+        super();
+        setX(x);
+        setY(y);
+        setW(WIDTH);
+        setH(HEIGHT);
+
+        setRect(new Rectangle());
+        getRect().x = getX();
+        getRect().y = getY();
+        getRect().width = WIDTH;
+        getRect().height = HEIGHT;
+        fireStrategy = ReflectUtil.newInstance(ConfigUtil.getStr("tank.player.fire.strategy"));
+    }
+
     public TankPlayer(int x, int y, Dir dir, Group group) {
         super();
         setX(x);
