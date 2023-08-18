@@ -91,7 +91,7 @@ public class TankPlayer extends GameObject {
         }
     }
 
-    public void keyPressed(KeyEvent e) {
+    public boolean keyPressed(KeyEvent e) {
         int keycode = e.getKeyCode();
         switch (keycode) {
             case KeyEvent.VK_LEFT:
@@ -111,11 +111,13 @@ public class TankPlayer extends GameObject {
                 moving = true;
                 break;
             default:
-                break;
+                return false;
         }
         if (moving) {
             move();
+            return true;
         }
+        return false;
     }
 
     public void move() {
@@ -146,7 +148,7 @@ public class TankPlayer extends GameObject {
         }
     }
 
-    public void keyReleased(KeyEvent e) {
+    public boolean keyReleased(KeyEvent e) {
         int keycode = e.getKeyCode();
         switch (keycode) {
             case KeyEvent.VK_LEFT:
@@ -165,8 +167,9 @@ public class TankPlayer extends GameObject {
                 fire();
                 break;
             default:
-                break;
+                return false;
         }
+        return true;
     }
 
     public void fire() {

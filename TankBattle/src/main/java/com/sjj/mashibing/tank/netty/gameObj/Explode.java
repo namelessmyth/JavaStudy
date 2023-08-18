@@ -1,6 +1,6 @@
 package com.sjj.mashibing.tank.netty.gameObj;
 
-import com.sjj.mashibing.tank.pattern.TankFrame;
+import com.sjj.mashibing.tank.netty.TankFrame;
 import com.sjj.mashibing.tank.util.Audio;
 import com.sjj.mashibing.tank.util.ResourceMgr;
 import lombok.Data;

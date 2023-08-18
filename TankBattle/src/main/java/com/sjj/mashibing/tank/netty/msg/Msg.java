@@ -21,7 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Msg implements Constants {
-    private MsgType msgType = MsgType.MOVE;
+    private MsgType msgType = MsgType.JOIN;
     private UUID id = UUID.randomUUID();
 
     /**

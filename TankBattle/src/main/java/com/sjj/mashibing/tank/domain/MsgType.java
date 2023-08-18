@@ -1,5 +1,6 @@
 package com.sjj.mashibing.tank.domain;
 
+import com.sjj.mashibing.tank.netty.msg.TankMoveMsg;
 import com.sjj.mashibing.tank.netty.msg.TankMsg;
 
 /**
@@ -16,7 +17,7 @@ public enum MsgType {
     /**
      * 坦克移动消息
      */
-    MOVE(TankMsg.class.getName());
+    MOVE(TankMoveMsg.class.getName());
     /**
      * 消息类型对应的类
      */

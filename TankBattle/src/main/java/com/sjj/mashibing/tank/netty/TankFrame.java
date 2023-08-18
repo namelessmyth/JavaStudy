@@ -3,6 +3,8 @@ package com.sjj.mashibing.tank.netty;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import com.sjj.mashibing.chatroom.Constants;
+import com.sjj.mashibing.tank.netty.msg.TankMoveMsg;
+import com.sjj.mashibing.tank.netty.msg.TankMsg;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -134,7 +136,7 @@ public class TankFrame extends Frame implements Constants {
             int keycode = e.getKeyCode();
             switch (keycode) {
                 default:
-                    getGm().getMyTank().keyPressed(e);
+                    boolean result = getGm().getMyTank().keyPressed(e);
                     break;
             }
         }
@@ -150,7 +152,10 @@ public class TankFrame extends Frame implements Constants {
                     Load();
                     break;
                 default:
-                    getGm().getMyTank().keyReleased(e);
+                    boolean result = getGm().getMyTank().keyReleased(e);
+                    if (result) {
+                        TankClient.send(new TankMoveMsg(TankFrame.INSTANCE.getGm().getMyTank()));
+                    }
                     break;
             }
         }

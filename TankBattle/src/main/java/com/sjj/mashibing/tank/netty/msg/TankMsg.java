@@ -26,7 +26,7 @@ import java.util.UUID;
  * @date 2023/8/16
  */
 @Data
-@ToString
+@ToString(callSuper = true)
 @Slf4j
 @NoArgsConstructor
 public class TankMsg extends Msg implements Constants {
@@ -39,13 +39,11 @@ public class TankMsg extends Msg implements Constants {
         super();
         setX(x);
         setY(y);
-        this.setMsgType(MsgType.JOIN);
     }
 
     public TankMsg(TankPlayer player) {
         super();
         BeanUtil.copyProperties(player, this);
-        this.setMsgType(MsgType.JOIN);
     }
 
     @Override
@@ -110,20 +108,5 @@ public class TankMsg extends Msg implements Constants {
         log.info("add tank to client:{}", this);
         //重新发送一下当前的这辆坦克信息，避免后加入的坦克无法接收到前面的坦克信息。
         TankClient.send(new TankMsg(myTank));
-    }
-
-    public void handleMove() {
-        TankPlayer myTank = TankFrame.INSTANCE.getGm().getMyTank();
-        if (getId() == null || getId().equals(myTank.getId())) {
-            log.info("Ignore self messages");
-            return;
-        }
-        Tank t = TankFrame.INSTANCE.getGm().findTankById(getId());
-        if (t != null) {
-            BeanUtil.copyProperties(this, t, new String[]{"id"});
-            log.info("Successfully moved tank:{}", t);
-        } else {
-            log.warn("No tanks found in GameObject:{}", this);
-        }
     }
 }

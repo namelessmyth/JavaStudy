@@ -85,7 +85,7 @@ public class Tank extends GameObject {
         if (moving) {
             move();
         }
-        if (random.nextInt(100) < 3) {
+        if (random.nextInt(100) < 0) {
             fire();
         }
     }
