@@ -1,8 +1,8 @@
-package com.sjj.mashibing.tank.pattern.chainCollider;
+package com.sjj.mashibing.tank.netty.chainCollider;
 
-import com.sjj.mashibing.tank.pattern.gameObj.Bullet;
-import com.sjj.mashibing.tank.pattern.gameObj.GameObject;
-import com.sjj.mashibing.tank.pattern.gameObj.Wall;
+import com.sjj.mashibing.tank.netty.gameObj.Bullet;
+import com.sjj.mashibing.tank.netty.gameObj.GameObject;
+import com.sjj.mashibing.tank.netty.gameObj.Wall;
 
 import java.io.Serializable;
 

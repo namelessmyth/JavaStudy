@@ -1,4 +1,4 @@
-package com.sjj.mashibing.tank.pattern.gameObj;
+package com.sjj.mashibing.tank.netty.gameObj;
 
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;

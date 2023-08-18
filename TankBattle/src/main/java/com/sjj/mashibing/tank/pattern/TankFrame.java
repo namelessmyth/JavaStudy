@@ -1,31 +1,18 @@
 package com.sjj.mashibing.tank.pattern;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.io.file.PathUtil;
-import cn.hutool.core.util.ReflectUtil;
-import cn.hutool.core.util.SerializeUtil;
-import cn.hutool.core.util.StrUtil;
 import com.sjj.mashibing.chatroom.Constants;
-import com.sjj.mashibing.tank.domain.Dir;
-import com.sjj.mashibing.tank.domain.Group;
-import com.sjj.mashibing.tank.pattern.chainCollider.CollideChain;
-import com.sjj.mashibing.tank.pattern.chainCollider.Collider;
-import com.sjj.mashibing.tank.pattern.gameObj.GameObject;
-import com.sjj.mashibing.tank.pattern.gameObj.Tank;
-import com.sjj.mashibing.tank.pattern.gameObj.TankPlayer;
-import com.sjj.mashibing.tank.pattern.gameObj.Wall;
-import com.sjj.mashibing.tank.util.ConfigUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Random;
 
 /**

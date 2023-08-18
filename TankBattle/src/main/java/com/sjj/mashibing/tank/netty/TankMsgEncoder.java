@@ -1,5 +1,6 @@
 package com.sjj.mashibing.tank.netty;
 
+import com.sjj.mashibing.tank.netty.msg.Msg;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -11,11 +12,12 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @version 1.0
  * @date 2023/8/16
  */
-public class TankMsgEncoder extends MessageToByteEncoder<TankMsg> {
+public class TankMsgEncoder extends MessageToByteEncoder<Msg> {
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, TankMsg tankMsg, ByteBuf byteBuf) throws Exception {
-        byte [] bs = tankMsg.toBytes();
+    protected void encode(ChannelHandlerContext channelHandlerContext, Msg msg, ByteBuf byteBuf) throws Exception {
+        byte [] bs = msg.toBytes();
         byteBuf.writeInt(bs.length);
+        byteBuf.writeInt(msg.getMsgType().ordinal());
         byteBuf.writeBytes(bs);
     }
 }

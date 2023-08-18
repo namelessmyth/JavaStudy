@@ -3,8 +3,6 @@ package com.sjj.mashibing.tank.netty;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import com.sjj.mashibing.chatroom.Constants;
-import com.sjj.mashibing.tank.pattern.GameModel;
-import com.sjj.mashibing.tank.util.Audio;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

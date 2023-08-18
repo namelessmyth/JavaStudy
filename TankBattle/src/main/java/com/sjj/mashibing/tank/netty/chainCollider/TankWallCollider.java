@@ -1,8 +1,8 @@
-package com.sjj.mashibing.tank.pattern.chainCollider;
+package com.sjj.mashibing.tank.netty.chainCollider;
 
-import com.sjj.mashibing.tank.pattern.gameObj.GameObject;
-import com.sjj.mashibing.tank.pattern.gameObj.Tank;
-import com.sjj.mashibing.tank.pattern.gameObj.Wall;
+import com.sjj.mashibing.tank.netty.gameObj.GameObject;
+import com.sjj.mashibing.tank.netty.gameObj.Tank;
+import com.sjj.mashibing.tank.netty.gameObj.Wall;
 
 /**
  * 坦克和墙相撞-实现类<br>
@@ -11,7 +11,7 @@ import com.sjj.mashibing.tank.pattern.gameObj.Wall;
  * @version 1.0
  * @date 2023/8/9
  */
-public class TankWallCollider implements Collider{
+public class TankWallCollider implements Collider {
     @Override
     public boolean collide(GameObject go1, GameObject go2) {
         if (go1.isLiving() && go2.isLiving()) {

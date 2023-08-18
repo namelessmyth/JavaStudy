@@ -1,6 +1,5 @@
 package com.sjj.mashibing.tank.domain;
 
-import java.io.Serializable;
 import java.util.Random;
 
 /**

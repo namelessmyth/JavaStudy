@@ -1,9 +1,9 @@
-package com.sjj.mashibing.tank.pattern.strategy;
+package com.sjj.mashibing.tank.netty.strategy;
 
 
-import com.sjj.mashibing.tank.pattern.TankFrame;
-import com.sjj.mashibing.tank.pattern.gameObj.Bullet;
-import com.sjj.mashibing.tank.pattern.gameObj.TankPlayer;
+import com.sjj.mashibing.tank.netty.TankFrame;
+import com.sjj.mashibing.tank.netty.gameObj.Bullet;
+import com.sjj.mashibing.tank.netty.gameObj.TankPlayer;
 
 /**
  * 类功能说明<br>

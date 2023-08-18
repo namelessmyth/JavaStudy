@@ -1,6 +1,5 @@
 package com.sjj.mashibing.chatroom;
 
-import cn.hutool.core.io.file.LineSeparator;
 import com.sjj.mashibing.tank.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,10 +1,12 @@
-package com.sjj.mashibing.tank.pattern.gameObj;
+package com.sjj.mashibing.tank.netty.gameObj;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Matcher;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
-import com.sjj.mashibing.tank.pattern.TankFrame;
+import com.sjj.mashibing.tank.netty.TankFrame;
+import com.sjj.mashibing.tank.netty.msg.TankMsg;
 import com.sjj.mashibing.tank.util.ResourceMgr;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,6 +44,15 @@ public class Tank extends GameObject {
         setH(HEIGHT);
         this.dir = dir;
         this.group = group;
+
+        updateRect();
+    }
+
+    public Tank(TankMsg msg) {
+        super();
+        setW(WIDTH);
+        setH(HEIGHT);
+        BeanUtil.copyProperties(msg, this);
 
         updateRect();
     }
@@ -122,6 +133,7 @@ public class Tank extends GameObject {
         TankFrame.INSTANCE.getGm().add(b);
     }
 
+    @Override
     public void die() {
         super.die();
         int eX = this.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;

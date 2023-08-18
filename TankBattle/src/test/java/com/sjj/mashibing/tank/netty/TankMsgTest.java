@@ -2,7 +2,9 @@ package com.sjj.mashibing.tank.netty;
 
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
-import com.sjj.mashibing.tank.pattern.gameObj.TankPlayer;
+import com.sjj.mashibing.tank.domain.MsgType;
+import com.sjj.mashibing.tank.netty.msg.TankMsg;
+import com.sjj.mashibing.tank.netty.gameObj.TankPlayer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
@@ -28,6 +30,9 @@ class TankMsgTest {
         int length = buf.readInt();
         assertEquals(33, length);
 
+        MsgType type = MsgType.values()[buf.readInt()];
+        assertEquals(type, MsgType.MOVE);
+
         int x = buf.readInt();
         int y = buf.readInt();
         assertEquals(20, x);
@@ -42,6 +47,8 @@ class TankMsgTest {
         //模拟写入入站请求
         ByteBuf buf = Unpooled.buffer();
         buf.writeInt(33);
+        buf.writeInt(MsgType.MOVE.ordinal());
+
         buf.writeInt(20);
         buf.writeInt(30);
         buf.writeInt(Dir.UP.ordinal());

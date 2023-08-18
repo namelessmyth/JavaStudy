@@ -1,7 +1,7 @@
-package com.sjj.mashibing.tank.pattern.chainCollider;
+package com.sjj.mashibing.tank.netty.chainCollider;
 
-import com.sjj.mashibing.tank.pattern.gameObj.GameObject;
-import com.sjj.mashibing.tank.pattern.gameObj.Tank;
+import com.sjj.mashibing.tank.netty.gameObj.GameObject;
+import com.sjj.mashibing.tank.netty.gameObj.Tank;
 
 /**
  * 坦克和坦克相撞实现类<br>

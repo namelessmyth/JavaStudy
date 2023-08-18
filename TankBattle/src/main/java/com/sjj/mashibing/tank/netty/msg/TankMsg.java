@@ -1,15 +1,15 @@
-package com.sjj.mashibing.tank.netty;
+package com.sjj.mashibing.tank.netty.msg;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.SerializeUtil;
 import com.sjj.mashibing.chatroom.Constants;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
 import com.sjj.mashibing.tank.domain.MsgType;
-import com.sjj.mashibing.tank.pattern.gameObj.Tank;
-import com.sjj.mashibing.tank.pattern.gameObj.TankPlayer;
-import lombok.AllArgsConstructor;
+import com.sjj.mashibing.tank.netty.TankClient;
+import com.sjj.mashibing.tank.netty.TankFrame;
+import com.sjj.mashibing.tank.netty.gameObj.Tank;
+import com.sjj.mashibing.tank.netty.gameObj.TankPlayer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -29,25 +29,26 @@ import java.util.UUID;
 @ToString
 @Slf4j
 @NoArgsConstructor
-@AllArgsConstructor
-public class TankMsg implements Constants {
-    private UUID id = UUID.randomUUID();
+public class TankMsg extends Msg implements Constants {
     private int x, y;
     private Dir dir = Dir.DOWN;
     private boolean moving = false;
     private Group group = Group.GOOD;
-    private MsgType msgType;
 
     public TankMsg(int x, int y) {
         super();
-        this.x = x;
-        this.y = y;
+        setX(x);
+        setY(y);
+        this.setMsgType(MsgType.JOIN);
     }
 
     public TankMsg(TankPlayer player) {
+        super();
         BeanUtil.copyProperties(player, this);
+        this.setMsgType(MsgType.JOIN);
     }
 
+    @Override
     public byte[] toBytes() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
@@ -58,8 +59,8 @@ public class TankMsg implements Constants {
             dos.writeInt(dir.ordinal());
             dos.writeBoolean(moving);
             dos.writeInt(group.ordinal());
-            dos.writeLong(id.getMostSignificantBits());
-            dos.writeLong(id.getLeastSignificantBits());
+            dos.writeLong(getId().getMostSignificantBits());
+            dos.writeLong(getId().getLeastSignificantBits());
             dos.flush();
         } catch (IOException e) {
             log.error("", e);
@@ -70,44 +71,59 @@ public class TankMsg implements Constants {
         return baos.toByteArray();
     }
 
-
-    public static TankMsg parse(byte[] bs) {
-        TankMsg result = new TankMsg();
+    @Override
+    public TankMsg parse(byte[] bs) {
         ByteArrayInputStream bais = new ByteArrayInputStream(bs);
         DataInputStream dis = new DataInputStream(bais);
         try {
-            result.setX(dis.readInt());
-            result.setY(dis.readInt());
-            result.setDir(Dir.values()[dis.readInt()]);
-            result.setMoving(dis.readBoolean());
-            result.setGroup(Group.values()[dis.readInt()]);
-            result.setId(new UUID(dis.readLong(), dis.readLong()));
+            this.setX(dis.readInt());
+            this.setY(dis.readInt());
+            this.setDir(Dir.values()[dis.readInt()]);
+            this.setMoving(dis.readBoolean());
+            this.setGroup(Group.values()[dis.readInt()]);
+            this.setId(new UUID(dis.readLong(), dis.readLong()));
         } catch (Exception e) {
             log.error("", e);
         } finally {
             IoUtil.close(bais);
             IoUtil.close(dis);
         }
-        return result;
+        return this;
     }
 
+    @Override
     public void handle() {
         TankPlayer myTank = TankFrame.INSTANCE.getGm().getMyTank();
-        if (id == null || id.equals(myTank.getId())
-                || TankFrame.INSTANCE.getGm().findTankById(id) != null) {
-            log.info("tankmsg is self:{}, is exists:{}", id.equals(myTank.getId())
-                    , TankFrame.INSTANCE.getGm().findTankById(id) != null);
+        if (getId() == null || getId().equals(myTank.getId())
+                || TankFrame.INSTANCE.getGm().findTankById(getId()) != null) {
+            log.info("tankmsg is self:{}, is exists:{}", getId().equals(myTank.getId())
+                    , TankFrame.INSTANCE.getGm().findTankById(getId()) != null);
             return;
         }
         Tank t = new Tank(this);
         if (t.getRect().intersects(myTank.getRect())) {
-            t.setX(TankFrame.INSTANCE.r.nextInt(GAME_WIDTH));
-            t.setY(TankFrame.INSTANCE.r.nextInt(GAME_HEIGHT) - 30);
+            t.setX(TankFrame.INSTANCE.getR().nextInt(GAME_WIDTH));
+            t.setY(TankFrame.INSTANCE.getR().nextInt(GAME_HEIGHT) - 30);
             log.info("reset x y");
         }
         TankFrame.INSTANCE.getGm().add(t);
         log.info("add tank to client:{}", this);
         //重新发送一下当前的这辆坦克信息，避免后加入的坦克无法接收到前面的坦克信息。
         TankClient.send(new TankMsg(myTank));
+    }
+
+    public void handleMove() {
+        TankPlayer myTank = TankFrame.INSTANCE.getGm().getMyTank();
+        if (getId() == null || getId().equals(myTank.getId())) {
+            log.info("Ignore self messages");
+            return;
+        }
+        Tank t = TankFrame.INSTANCE.getGm().findTankById(getId());
+        if (t != null) {
+            BeanUtil.copyProperties(this, t, new String[]{"id"});
+            log.info("Successfully moved tank:{}", t);
+        } else {
+            log.warn("No tanks found in GameObject:{}", this);
+        }
     }
 }

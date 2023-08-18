@@ -1,10 +1,12 @@
-package com.sjj.mashibing.tank.pattern.gameObj;
+package com.sjj.mashibing.tank.netty.gameObj;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.Matcher;
+import cn.hutool.core.util.ReflectUtil;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
-import com.sjj.mashibing.tank.pattern.TankFrame;
+import com.sjj.mashibing.tank.netty.TankFrame;
+import com.sjj.mashibing.tank.netty.strategy.FireStrategy;
+import com.sjj.mashibing.tank.util.Audio;
+import com.sjj.mashibing.tank.util.ConfigUtil;
 import com.sjj.mashibing.tank.util.ResourceMgr;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,11 +14,11 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.Random;
 
 /**
- * 地方-坦克<br>
+ * 玩家控制的坦克<br>
  *
  * @version 1.0
  * @date 2023/7/31
@@ -25,16 +27,31 @@ import java.util.Random;
 @Slf4j
 @ToString(exclude = {"rect"})
 @NoArgsConstructor
-public class Tank extends GameObject {
+public class TankPlayer extends GameObject {
     private final static int SPEED = 5;
     private Dir dir = Dir.DOWN;
-    private boolean moving = true;
-    private Group group = Group.BAD;
-    private Random random = new Random();
+    private boolean moving = false;
+    private Group group = Group.GOOD;
     public static int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
-    public Tank(int x, int y, Dir dir, Group group) {
+    private FireStrategy fireStrategy;
+
+    public TankPlayer(int x, int y) {
+        super();
+        setX(x);
+        setY(y);
+        setW(WIDTH);
+        setH(HEIGHT);
+
+        getRect().x = getX();
+        getRect().y = getY();
+        getRect().width = WIDTH;
+        getRect().height = HEIGHT;
+        fireStrategy = ReflectUtil.newInstance(ConfigUtil.getStr("netty.player.fire.strategy"));
+    }
+
+    public TankPlayer(int x, int y, Dir dir, Group group) {
         super();
         setX(x);
         setY(y);
@@ -44,6 +61,7 @@ public class Tank extends GameObject {
         this.group = group;
 
         updateRect();
+        fireStrategy = ReflectUtil.newInstance(ConfigUtil.getStr("netty.player.fire.strategy"));
     }
 
     /**
@@ -71,15 +89,38 @@ public class Tank extends GameObject {
                 g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankD : ResourceMgr.badTankD, getX(), getY(), null);
                 break;
         }
+    }
+
+    public void keyPressed(KeyEvent e) {
+        int keycode = e.getKeyCode();
+        switch (keycode) {
+            case KeyEvent.VK_LEFT:
+                dir = Dir.LEFT;
+                moving = true;
+                break;
+            case KeyEvent.VK_RIGHT:
+                dir = Dir.RIGHT;
+                moving = true;
+                break;
+            case KeyEvent.VK_UP:
+                dir = Dir.UP;
+                moving = true;
+                break;
+            case KeyEvent.VK_DOWN:
+                dir = Dir.DOWN;
+                moving = true;
+                break;
+            default:
+                break;
+        }
         if (moving) {
             move();
-        }
-        if (random.nextInt(100) < 3) {
-            fire();
         }
     }
 
     public void move() {
+        new Thread(() -> new Audio("audio/tank_move.wav").play()).start();
+
         int xNew = getX();
         int yNew = getY();
         switch (dir) {
@@ -98,45 +139,48 @@ public class Tank extends GameObject {
             default:
                 break;
         }
-
         if (boundCheck(xNew, yNew)) {
-            setXo(getX());
-            setYo(getY());
             setX(xNew);
             setY(yNew);
             updateRect();
         }
+    }
 
-        //移动之后，随机获取一个方向。
-        if (random.nextInt(100) < 5) {
-            this.setDir(Dir.random());
+    public void keyReleased(KeyEvent e) {
+        int keycode = e.getKeyCode();
+        switch (keycode) {
+            case KeyEvent.VK_LEFT:
+                moving = false;
+                break;
+            case KeyEvent.VK_RIGHT:
+                moving = false;
+                break;
+            case KeyEvent.VK_UP:
+                moving = false;
+                break;
+            case KeyEvent.VK_DOWN:
+                moving = false;
+                break;
+            case KeyEvent.VK_CONTROL:
+                fire();
+                break;
+            default:
+                break;
         }
     }
 
     public void fire() {
-        //根据坦克坐标计算子弹坐标，使子弹出现在坦克中部。
-        int bX = getX() + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
-        int bY = getY() + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        Bullet b = new Bullet(getId(), bX, bY, this.dir, this.group);
-
-        TankFrame.INSTANCE.getGm().add(b);
+        new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();
+        fireStrategy.fire(this);
     }
 
+    @Override
     public void die() {
         super.die();
-        int eX = this.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
-        int eY = this.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
+        int eX = this.getX() + TankPlayer.WIDTH / 2 - Explode.WIDTH / 2;
+        int eY = this.getY() + TankPlayer.HEIGHT / 2 - Explode.HEIGHT / 2;
         TankFrame.INSTANCE.getGm().add(new Explode(eX, eY));
-        log.info("this tank is die. size of tanks:{}, this:{}", CollUtil.count(TankFrame.INSTANCE.getGm().getObjects(),
-                new Matcher<GameObject>() {
-                    @Override
-                    public boolean match(GameObject gameObject) {
-                        if (gameObject instanceof Tank) {
-                            return true;
-                        }
-                        return false;
-                    }
-                }), this);
+        log.info("this tank is die.{}", this);
     }
 
     /**
@@ -144,6 +188,7 @@ public class Tank extends GameObject {
      */
     public boolean boundCheck(int x, int y) {
         if (x < 0 || x > TankFrame.GAME_WIDTH - WIDTH || y < 30 || y > TankFrame.GAME_HEIGHT - HEIGHT) {
+            log.info("坐标超出边界，x:{}，y:{}", x, y);
             return false;
         }
         return true;
@@ -154,11 +199,5 @@ public class Tank extends GameObject {
         getRect().y = getY();
         getRect().width = getW();
         getRect().height = getH();
-    }
-
-    public void back() {
-        setX(getXo());
-        setY(getYo());
-        updateRect();
     }
 }

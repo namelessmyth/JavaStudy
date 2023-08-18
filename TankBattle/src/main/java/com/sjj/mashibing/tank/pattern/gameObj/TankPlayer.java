@@ -174,6 +174,7 @@ public class TankPlayer extends GameObject {
         fireStrategy.fire(this);
     }
 
+    @Override
     public void die() {
         super.die();
         int eX = this.getX() + TankPlayer.WIDTH / 2 - Explode.WIDTH / 2;
