@@ -32,6 +32,7 @@ public class TankServer {
                 protected void initChannel(SocketChannel sc) throws Exception {
                     log.info("a client connected:{}", sc);
                     sc.pipeline().addLast(new TankMsgDecoder())
+                            .addLast(new TankMsgEncoder())
                             .addLast(new MyChildHandler());
                 }
             });
@@ -65,9 +66,9 @@ class MyChildHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        TankMsg buf = (TankMsg) msg;
-        log.info("channelRead().input:{}", buf);
-        if (buf != null) {
+        log.info("channelRead().input:{}", msg);
+        if (msg instanceof TankMsg) {
+            TankMsg buf = (TankMsg) msg;
             ServerFrame.INSTANCE.updateMsg(ctx.channel().remoteAddress() + ">" + msg);
             TankServer.clients.writeAndFlush(msg);
             log.info("TankServer.clients.writeAndFlush:{}", msg);

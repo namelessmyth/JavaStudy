@@ -56,8 +56,8 @@ public class TankClient {
      *
      * @param msg 聊天内容
      */
-    public static void send(String msg) {
-        channel.writeAndFlush(Unpooled.copiedBuffer(msg.getBytes()));
+    public static void send(TankMsg msg) {
+        channel.writeAndFlush(msg);
         log.info("client.send().{}", msg);
     }
 
@@ -65,7 +65,7 @@ public class TankClient {
      * 关闭客户端方法，向服务端发送特定消息告知其删除本客户端。
      */
     public static void close() {
-        send("__88__");
+        send(new TankMsg(-1, -1));
         channel.close();
     }
 }
@@ -79,8 +79,11 @@ class MyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        TankMsg t = (TankMsg) msg;
-        log.info("channelRead.msg:{}", t);
+        log.info("channelRead.msg:{}", msg);
+        if(msg instanceof TankMsg){
+            TankMsg t = (TankMsg) msg;
+            t.handle();
+        }
     }
 
     /**

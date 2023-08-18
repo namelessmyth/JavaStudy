@@ -24,6 +24,7 @@ public class TankMsgDecoder extends ByteToMessageDecoder {
         }
         int length = byteBuf.readInt();
         byte [] bs = new byte [length];
+        byteBuf.readBytes(bs);
         TankMsg msg = TankMsg.parse(bs);
 
         list.add(msg);

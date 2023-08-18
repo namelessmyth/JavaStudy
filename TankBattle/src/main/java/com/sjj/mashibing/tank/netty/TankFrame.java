@@ -39,7 +39,7 @@ public class TankFrame extends Frame implements Constants {
         INSTANCE.setVisible(true);
         log.info("tank war TankMain frame is visible");
 
-        new Thread(() -> new Audio("audio/war1.wav").loop()).start();
+        //new Thread(() -> new Audio("audio/war1.wav").loop()).start();
         new Thread(() -> {
             for (; ; ) {
                 try {

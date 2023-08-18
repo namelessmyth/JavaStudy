@@ -1,11 +1,14 @@
 package com.sjj.mashibing.tank.netty;
 
 import com.sjj.mashibing.tank.domain.Dir;
+import com.sjj.mashibing.tank.domain.Group;
 import com.sjj.mashibing.tank.pattern.gameObj.TankPlayer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,11 +41,19 @@ class TankMsgTest {
         channel.pipeline().addLast(new TankMsgDecoder());
         //模拟写入入站请求
         ByteBuf buf = Unpooled.buffer();
-        buf.writeInt(3);
-        buf.writeInt(4);
+        buf.writeInt(33);
+        buf.writeInt(20);
+        buf.writeInt(30);
+        buf.writeInt(Dir.UP.ordinal());
+        buf.writeBoolean(true);
+        buf.writeInt(Group.GOOD.ordinal());
+        UUID id = UUID.randomUUID();
+        buf.writeLong(id.getMostSignificantBits());
+        buf.writeLong(id.getLeastSignificantBits());
+
         channel.writeInbound(buf);
         //读取刚刚入站数据
         TankMsg msg = channel.readInbound();
-        assertEquals(msg.getX(), 3);
+        assertEquals(msg.getX(), 20);
     }
 }

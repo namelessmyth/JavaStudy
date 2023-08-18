@@ -44,7 +44,6 @@ public class TankPlayer extends GameObject {
         setW(WIDTH);
         setH(HEIGHT);
 
-        setRect(new Rectangle());
         getRect().x = getX();
         getRect().y = getY();
         getRect().width = WIDTH;
@@ -61,11 +60,7 @@ public class TankPlayer extends GameObject {
         this.dir = dir;
         this.group = group;
 
-        setRect(new Rectangle());
-        getRect().x = getX();
-        getRect().y = getY();
-        getRect().width = WIDTH;
-        getRect().height = HEIGHT;
+        updateRect();
         fireStrategy = ReflectUtil.newInstance(ConfigUtil.getStr("tank.player.fire.strategy"));
     }
 
@@ -201,5 +196,7 @@ public class TankPlayer extends GameObject {
     public void updateRect() {
         getRect().x = getX();
         getRect().y = getY();
+        getRect().width = getW();
+        getRect().height = getH();
     }
 }

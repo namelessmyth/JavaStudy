@@ -1,5 +1,6 @@
 package com.sjj.mashibing.tank.pattern;
 
+import com.sjj.mashibing.chatroom.Constants;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
 import com.sjj.mashibing.tank.pattern.chainCollider.CollideChain;
@@ -29,7 +30,7 @@ import java.util.UUID;
 @Data
 @Slf4j
 @ToString
-public class GameModel implements Serializable {
+public class GameModel implements Serializable, Constants {
     private static final long serialVersionUID = -8488675236010379054L;
     public static final int ENEMY_SIZE = ConfigUtil.getInt("tank.enemy.size");
 
@@ -44,10 +45,10 @@ public class GameModel implements Serializable {
     private void initGameObjects() {
         objects = new ArrayList<>();
 
-        myTank = new TankPlayer(TankFrame.GAME_WIDTH / 2 - 100, TankFrame.GAME_HEIGHT - 70, Dir.UP, Group.GOOD);
+        myTank = new TankPlayer(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD);
         add(myTank);
 
-        int gap = TankFrame.GAME_WIDTH / ENEMY_SIZE;
+        int gap = GAME_WIDTH / ENEMY_SIZE;
         for (int i = 0; i < ENEMY_SIZE; i++) {
             Tank tank = new Tank(gap * i, 30, Dir.DOWN, Group.BAD);
             add(tank);
@@ -87,5 +88,19 @@ public class GameModel implements Serializable {
 
     public void remove(GameObject go) {
         objects.remove(go);
+    }
+
+    public Tank findTankById(UUID id) {
+        if (id != null) {
+            for (GameObject obj : objects) {
+                if (obj instanceof Tank) {
+                    Tank t = (Tank) obj;
+                    if (t.getId().equals(id)) {
+                        return t;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
