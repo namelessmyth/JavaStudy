@@ -2,6 +2,8 @@ package com.sjj.mashibing.chatroom;
 
 import com.sjj.mashibing.tank.util.ConfigUtil;
 
+import java.util.Random;
+
 /**
  * 接口功能说明<br>
  *
@@ -13,4 +15,5 @@ public interface Constants {
     String LINE_SEPERATOR = System.getProperty("line.separator");
     int GAME_WIDTH = ConfigUtil.getInt("frame.main.width");
     int GAME_HEIGHT = ConfigUtil.getInt("frame.main.height");
+    Random RANDOM = new Random();
 }

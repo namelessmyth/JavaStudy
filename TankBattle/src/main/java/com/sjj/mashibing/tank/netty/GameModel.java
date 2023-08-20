@@ -45,7 +45,7 @@ public class GameModel implements Serializable, Constants {
     private void initGameObjects() {
         objects = new ArrayList<>();
 
-        myTank = new TankPlayer(GAME_WIDTH / 2 - 100, GAME_HEIGHT - 70, Dir.UP, Group.GOOD);
+        myTank = new TankPlayer(RANDOM.nextInt(GAME_WIDTH), GAME_HEIGHT - 70, Dir.UP, Group.GOOD);
         add(myTank);
 
         int gap = GAME_WIDTH / ENEMY_SIZE;

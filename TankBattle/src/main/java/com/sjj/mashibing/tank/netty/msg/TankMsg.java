@@ -99,11 +99,6 @@ public class TankMsg extends Msg implements Constants {
             return;
         }
         Tank t = new Tank(this);
-        if (t.getRect().intersects(myTank.getRect())) {
-            t.setX(TankFrame.INSTANCE.getR().nextInt(GAME_WIDTH));
-            t.setY(TankFrame.INSTANCE.getR().nextInt(GAME_HEIGHT) - 30);
-            log.info("reset x y");
-        }
         TankFrame.INSTANCE.getGm().add(t);
         log.info("add tank to client:{}", this);
         //重新发送一下当前的这辆坦克信息，避免后加入的坦克无法接收到前面的坦克信息。

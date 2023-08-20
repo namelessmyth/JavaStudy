@@ -1,5 +1,7 @@
 package com.sjj.mashibing.tank.domain;
 
+import com.sjj.mashibing.chatroom.Constants;
+
 import java.util.Random;
 
 /**
@@ -10,9 +12,8 @@ import java.util.Random;
 public enum Dir {
     LEFT, RIGHT, UP, DOWN;
 
-    static Random random = new Random();
     public static Dir random() {
-        return values()[random.nextInt(values().length)];
+        return values()[Constants.RANDOM.nextInt(values().length)];
     }
 
     public Dir getOpposite() {

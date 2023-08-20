@@ -3,6 +3,8 @@ package com.sjj.mashibing.tank.netty.gameObj;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Matcher;
+import cn.hutool.core.util.RandomUtil;
+import com.sjj.mashibing.chatroom.Constants;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
 import com.sjj.mashibing.tank.netty.TankFrame;
@@ -27,12 +29,11 @@ import java.util.Random;
 @Slf4j
 @ToString(exclude = {"rect"})
 @NoArgsConstructor
-public class Tank extends GameObject {
+public class Tank extends GameObject implements Constants {
     private final static int SPEED = 5;
     private Dir dir = Dir.DOWN;
     private boolean moving = true;
     private Group group = Group.BAD;
-    private Random random = new Random();
     public static int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
@@ -85,7 +86,7 @@ public class Tank extends GameObject {
         if (moving) {
             move();
         }
-        if (random.nextInt(100) < 0) {
+        if (RANDOM.nextInt(100) < 0) {
             fire();
         }
     }
@@ -119,7 +120,7 @@ public class Tank extends GameObject {
         }
 
         //移动之后，随机获取一个方向。
-        if (random.nextInt(100) < 5) {
+        if (RANDOM.nextInt(100) < 5) {
             this.setDir(Dir.random());
         }
     }
