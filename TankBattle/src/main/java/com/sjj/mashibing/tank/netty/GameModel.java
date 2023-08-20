@@ -45,7 +45,7 @@ public class GameModel implements Serializable, Constants {
     private void initGameObjects() {
         objects = new ArrayList<>();
 
-        myTank = new TankPlayer(RANDOM.nextInt(GAME_WIDTH), GAME_HEIGHT - 70, Dir.UP, Group.GOOD);
+        myTank = new TankPlayer(RANDOM.nextInt(GAME_WIDTH - Tank.WIDTH), GAME_HEIGHT - 70, Dir.UP, Group.GOOD);
         add(myTank);
 
         int gap = GAME_WIDTH / ENEMY_SIZE;
@@ -97,6 +97,19 @@ public class GameModel implements Serializable, Constants {
                     Tank t = (Tank) obj;
                     if (t.getId().equals(id)) {
                         return t;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public <T extends GameObject> T findById(UUID id, Class<T> clazz) {
+        if (id != null) {
+            for (GameObject obj : objects) {
+                if (clazz.isInstance(obj)) {
+                    if (obj.getId().equals(id)) {
+                        return (T) obj;
                     }
                 }
             }

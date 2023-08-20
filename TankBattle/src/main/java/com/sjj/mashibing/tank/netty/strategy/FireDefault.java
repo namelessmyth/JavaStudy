@@ -1,9 +1,11 @@
 package com.sjj.mashibing.tank.netty.strategy;
 
 
+import com.sjj.mashibing.tank.netty.TankClient;
 import com.sjj.mashibing.tank.netty.TankFrame;
 import com.sjj.mashibing.tank.netty.gameObj.Bullet;
 import com.sjj.mashibing.tank.netty.gameObj.TankPlayer;
+import com.sjj.mashibing.tank.netty.msg.BulletMsg;
 
 /**
  * 类功能说明<br>
@@ -20,5 +22,6 @@ public class FireDefault implements FireStrategy {
         int bY = tank.getY() + TankPlayer.HEIGHT / 2 - Bullet.HEIGHT / 2;
         Bullet b = new Bullet(tank.getId(), bX, bY, tank.getDir(), tank.getGroup());
         TankFrame.INSTANCE.getGm().add(b);
+        TankClient.send(new BulletMsg(b));
     }
 }

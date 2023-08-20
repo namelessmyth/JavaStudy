@@ -5,7 +5,6 @@ import cn.hutool.core.io.IoUtil;
 import com.sjj.mashibing.chatroom.Constants;
 import com.sjj.mashibing.tank.domain.Dir;
 import com.sjj.mashibing.tank.domain.Group;
-import com.sjj.mashibing.tank.domain.MsgType;
 import com.sjj.mashibing.tank.netty.TankClient;
 import com.sjj.mashibing.tank.netty.TankFrame;
 import com.sjj.mashibing.tank.netty.gameObj.Tank;
@@ -19,7 +18,7 @@ import java.io.*;
 import java.util.UUID;
 
 /**
- * 类功能说明<br>
+ * 坦克消息<br>
  *
  * @author namelessmyth
  * @version 1.0
@@ -59,6 +58,7 @@ public class TankMsg extends Msg implements Constants {
             dos.writeInt(group.ordinal());
             dos.writeLong(getId().getMostSignificantBits());
             dos.writeLong(getId().getLeastSignificantBits());
+            //dos.writeUTF(getClientId());
             dos.flush();
         } catch (IOException e) {
             log.error("", e);
@@ -80,6 +80,7 @@ public class TankMsg extends Msg implements Constants {
             this.setMoving(dis.readBoolean());
             this.setGroup(Group.values()[dis.readInt()]);
             this.setId(new UUID(dis.readLong(), dis.readLong()));
+            //this.setClientId(dis.readUTF());
         } catch (Exception e) {
             log.error("", e);
         } finally {

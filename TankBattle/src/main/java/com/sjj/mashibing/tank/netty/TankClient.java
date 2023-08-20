@@ -1,6 +1,5 @@
 package com.sjj.mashibing.tank.netty;
 
-import com.sjj.mashibing.tank.domain.MsgType;
 import com.sjj.mashibing.tank.netty.msg.Msg;
 import com.sjj.mashibing.tank.netty.msg.TankMsg;
 import io.netty.bootstrap.Bootstrap;
@@ -59,6 +58,7 @@ public class TankClient {
      * @param msg 聊天内容
      */
     public static void send(Msg msg) {
+        msg.setClientId(channel.localAddress().toString());
         channel.writeAndFlush(msg);
         log.info("client.send().{}", msg);
     }

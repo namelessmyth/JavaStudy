@@ -21,8 +21,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Msg implements Constants {
-    private MsgType msgType = MsgType.JOIN;
+    private MsgType msgType = MsgType.TANK_JOIN;
     private UUID id = UUID.randomUUID();
+    private String clientId;
 
     /**
      * 将消息体转换成 byte[]

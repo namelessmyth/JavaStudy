@@ -5,6 +5,7 @@ import com.sjj.mashibing.tank.domain.Group;
 import com.sjj.mashibing.tank.netty.TankFrame;
 import com.sjj.mashibing.tank.util.ResourceMgr;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Data
 @Slf4j
 @ToString
+@NoArgsConstructor
 public class Bullet extends GameObject {
     private static final int SPEED = 8;
 
@@ -66,7 +68,7 @@ public class Bullet extends GameObject {
     }
 
     public boolean collideWith(Tank tank) {
-        if (this.playerId.equals(tank.getId()) || this.getGroup() == tank.getGroup()) {
+        if (tank.getId().equals(this.playerId) || this.getGroup() == tank.getGroup()) {
             //防止自相残杀
             return true;
         }

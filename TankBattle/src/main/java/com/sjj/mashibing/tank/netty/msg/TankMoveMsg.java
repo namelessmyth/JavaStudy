@@ -1,12 +1,8 @@
 package com.sjj.mashibing.tank.netty.msg;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.io.IoUtil;
 import com.sjj.mashibing.chatroom.Constants;
-import com.sjj.mashibing.tank.domain.Dir;
-import com.sjj.mashibing.tank.domain.Group;
 import com.sjj.mashibing.tank.domain.MsgType;
-import com.sjj.mashibing.tank.netty.TankClient;
 import com.sjj.mashibing.tank.netty.TankFrame;
 import com.sjj.mashibing.tank.netty.gameObj.Tank;
 import com.sjj.mashibing.tank.netty.gameObj.TankPlayer;
@@ -15,11 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
-import java.util.UUID;
-
 /**
- * 坦克移动消息说明<br>
+ * 坦克移动消息<br>
  *
  * @author namelessmyth
  * @version 1.0
@@ -30,7 +23,7 @@ import java.util.UUID;
 @Slf4j
 @NoArgsConstructor
 public class TankMoveMsg extends TankMsg implements Constants {
-    private MsgType msgType = MsgType.MOVE;
+    private MsgType msgType = MsgType.TANK_MOVE;
 
     public TankMoveMsg(TankPlayer player) {
         super();

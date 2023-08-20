@@ -1,5 +1,6 @@
 package com.sjj.mashibing.tank.domain;
 
+import com.sjj.mashibing.tank.netty.msg.BulletMsg;
 import com.sjj.mashibing.tank.netty.msg.TankMoveMsg;
 import com.sjj.mashibing.tank.netty.msg.TankMsg;
 
@@ -13,11 +14,15 @@ public enum MsgType {
     /**
      * 坦克加入消息
      */
-    JOIN(TankMsg.class.getName()),
+    TANK_JOIN(TankMsg.class.getName()),
     /**
      * 坦克移动消息
      */
-    MOVE(TankMoveMsg.class.getName());
+    TANK_MOVE(TankMoveMsg.class.getName()),
+    /**
+     * 子弹消息
+     */
+    BULLET_JOIN(BulletMsg.class.getName());
     /**
      * 消息类型对应的类
      */

@@ -4,7 +4,6 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import com.sjj.mashibing.chatroom.Constants;
 import com.sjj.mashibing.tank.netty.msg.TankMoveMsg;
-import com.sjj.mashibing.tank.netty.msg.TankMsg;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,8 +27,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Data
 public class TankFrame extends Frame implements Constants {
-
-    Random r = new Random();
     Image offScreenImage = null;
     GameModel gm;
     public static final TankFrame INSTANCE = new TankFrame();
