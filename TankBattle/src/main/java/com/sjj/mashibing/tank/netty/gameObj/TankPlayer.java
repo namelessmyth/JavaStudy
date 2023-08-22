@@ -175,7 +175,6 @@ public class TankPlayer extends GameObject {
     public void fire() {
         new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();
         fireStrategy.fire(this);
-
     }
 
     @Override

@@ -58,7 +58,7 @@ public class TankMsg extends Msg implements Constants {
             dos.writeInt(group.ordinal());
             dos.writeLong(getId().getMostSignificantBits());
             dos.writeLong(getId().getLeastSignificantBits());
-            //dos.writeUTF(getClientId());
+            dos.writeUTF(getClientId());
             dos.flush();
         } catch (IOException e) {
             log.error("", e);
@@ -80,7 +80,7 @@ public class TankMsg extends Msg implements Constants {
             this.setMoving(dis.readBoolean());
             this.setGroup(Group.values()[dis.readInt()]);
             this.setId(new UUID(dis.readLong(), dis.readLong()));
-            //this.setClientId(dis.readUTF());
+            this.setClientId(dis.readUTF());
         } catch (Exception e) {
             log.error("", e);
         } finally {

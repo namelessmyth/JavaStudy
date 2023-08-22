@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Data
 @Slf4j
-@ToString
+@ToString(callSuper = true)
 @NoArgsConstructor
 public class Bullet extends GameObject {
     private static final int SPEED = 8;

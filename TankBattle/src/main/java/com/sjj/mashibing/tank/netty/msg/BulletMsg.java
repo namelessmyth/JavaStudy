@@ -39,6 +39,9 @@ public class BulletMsg extends TankMsg implements Constants {
         if (b == null) {
             b = new Bullet();
             BeanUtil.copyProperties(this, b);
+            b.setW(Bullet.WIDTH);
+            b.setH(Bullet.HEIGHT);
+            b.updateRect();
             TankFrame.INSTANCE.getGm().add(b);
             log.info("Successfully join Bullet:{}", b);
         }

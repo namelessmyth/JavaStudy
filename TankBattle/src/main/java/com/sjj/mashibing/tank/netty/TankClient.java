@@ -82,8 +82,12 @@ class MyClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         log.info("channelRead.msg:{}", msg);
-        if(msg instanceof TankMsg){
+        if (msg instanceof TankMsg) {
             TankMsg t = (TankMsg) msg;
+            if (ctx.channel().localAddress().toString().equals(t.getClientId())) {
+                log.info("自己发的消息不处理！");
+                return;
+            }
             t.handle();
         }
     }
@@ -93,7 +97,9 @@ class MyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ctx.writeAndFlush(new TankMsg(TankFrame.INSTANCE.getGm().getMyTank()));
+        TankMsg msg = new TankMsg(TankFrame.INSTANCE.getGm().getMyTank());
+        msg.setClientId(ctx.channel().localAddress().toString());
+        ctx.writeAndFlush(msg);
         log.info("connected to server.");
     }
 
