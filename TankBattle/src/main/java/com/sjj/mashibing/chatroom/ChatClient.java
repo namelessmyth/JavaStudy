@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 类功能说明<br>
+ * 聊天室-客户端<br>
  *
  * @author namelessmyth
  * @version 1.0

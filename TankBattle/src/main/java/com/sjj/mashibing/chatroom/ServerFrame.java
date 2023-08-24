@@ -1,18 +1,14 @@
 package com.sjj.mashibing.chatroom;
 
-import cn.hutool.core.io.file.LineSeparator;
 import com.sjj.mashibing.tank.util.ConfigUtil;
-import javafx.scene.layout.Pane;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * 类功能说明<br>
+ * 聊天室-服务端界面<br>
  *
  * @author namelessmyth
  * @version 1.0

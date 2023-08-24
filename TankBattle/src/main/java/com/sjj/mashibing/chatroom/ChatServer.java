@@ -14,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 聊天室-服务端
+ */
 @Slf4j
 public class ChatServer {
     static ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);

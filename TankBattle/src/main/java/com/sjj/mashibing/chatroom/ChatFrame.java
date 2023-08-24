@@ -10,7 +10,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * 类功能说明<br>
+ * 聊天室客户端-界面<br>
  *
  * @author namelessmyth
  * @version 1.0
