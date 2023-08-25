@@ -1,7 +1,7 @@
 package com.sjj.mashibing.algorithm.bin;
 
 /**
- * 给定一个参数N，求1!+2!+3!+......N!的结果<br>
+ * 阶乘之和，给定一个参数N，求1!+2!+3!+......N!的结果<br>
  *
  * @author namelessmyth
  * @version 1.0
@@ -17,13 +17,6 @@ public class SumFactorial {
         return result;
     }
 
-    private static long factorial(int n) {
-        long result = 1;
-        for (int i = 1; i <= n; i++) {
-            result = result * i;
-        }
-        return result;
-    }
 
     public static long f2(int n) {
         long result = 0;
@@ -35,13 +28,30 @@ public class SumFactorial {
         return result;
     }
 
-    public static void main(String[] args) {
-        long start = System.currentTimeMillis();
-        System.out.println(f1(200000));
-        long end = System.currentTimeMillis();
-        System.out.println("f1.time:" + (end - start));
+    public static long factorial(int n) {
+        long result = 1;
+        for (int i = 1; i <= n; i++) {
+            result = result * i;
+        }
+        return result;
+    }
 
-        System.out.println(f2(200000));
-        System.out.println("f2.time:" + (System.currentTimeMillis() - end));
+    /**
+     * @param n
+     * @author namelessmyth
+     * @return
+     */
+    public static long f3(int n) {
+        long result = 0L;
+        long temp = 1L;
+        for (int i = 1; i <= n; i++) {
+            temp *= i;
+            result += temp;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        //见单元测试SumFactorialTest
     }
 }
