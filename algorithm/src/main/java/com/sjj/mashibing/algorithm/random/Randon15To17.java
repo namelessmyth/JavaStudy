@@ -21,24 +21,30 @@ public class Randon15To17 {
     }
 
     public static int f7() {
-        int res = 0;
-        do {
-            //此处返回的是[0-7]的随机数
-            res = (f7_01() << 2) + (f7_01() << 1) + (f7_01() << 0);
-            //遇到0就重新计算
-        } while (res == 0);
-        return res;
+        return f7_02() + 1;
     }
 
     /**
-     * 将f5函数调整成随机返回0和1
+     * 将f5函数调整成等概率返回0和1
      */
     public static int f7_01() {
         int res = 0;
         do {
             res = f5();
+            //等于3重做
         } while (res == 3);
+        //1,2改成0，3，5改成1
         return res < 3 ? 0 : 1;
+    }
+
+    public static int f7_02() {
+        int res = 0;
+        do {
+            //一共3位，每一位都是等概率，所以加起来就是等概率返回[0-7]
+            res = (f7_01() << 2) + (f7_01() << 1) + (f7_01() << 0);
+            //遇到0就重新计算
+        } while (res == 7);
+        return res;
     }
 
     public static int f7Math() {
@@ -47,6 +53,7 @@ public class Randon15To17 {
 
     public static void main(String[] args) {
         int total = 100000;
+        //使用数组位数来统计1-5中每个数的生成概率
         int[] count5 = {0, 0, 0, 0, 0};
         int[] count7 = {0, 0, 0, 0, 0, 0, 0};
         int[] count7m = {0, 0, 0, 0, 0, 0, 0};
