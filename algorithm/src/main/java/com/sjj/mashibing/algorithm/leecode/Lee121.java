@@ -19,7 +19,6 @@ public class Lee121 {
      * </ol>
      *
      * @param prices
-     * @return
      */
     public int maxProfit(int[] prices) {
         int max = 0;
@@ -61,7 +60,7 @@ public class Lee121 {
     }
 
     public static void main(String[] args) {
-        int[] nums1 = new int[]{5,6,9,1,4};
+        int[] nums1 = new int[]{5, 6, 9, 1, 4};
         int result = new Lee121().maxProfit(nums1);
         System.out.println(Arrays.toString(nums1));
         System.out.println(result);
