@@ -1,6 +1,8 @@
-package com.sjj.mashibing.algorithm.leecode;
+package com.gem.leetcode;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * https://leetcode.cn/problems/merge-sorted-array/description/?envType=study-plan-v2&envId=top-interview-150<br>

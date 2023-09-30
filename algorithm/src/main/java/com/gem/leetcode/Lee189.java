@@ -1,4 +1,4 @@
-package com.sjj.mashibing.algorithm.leecode;
+package com.gem.leetcode;
 
 import java.util.Arrays;
 
@@ -7,7 +7,6 @@ import java.util.Arrays;
  * 189. 轮转数组
  * @author namelessmyth
  * @version 1.0
- * @date 2023/9/15
  */
 public class Lee189 {
     /**

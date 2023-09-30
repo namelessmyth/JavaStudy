@@ -1,4 +1,4 @@
-package com.sjj.mashibing.algorithm.leecode;
+package com.gem.leetcode;
 
 import java.util.HashMap;
 import java.util.Map;

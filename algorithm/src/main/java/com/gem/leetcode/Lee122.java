@@ -1,11 +1,10 @@
-package com.sjj.mashibing.algorithm.leecode;
+package com.gem.leetcode;
 
 /**
  * <a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/description/?envType=study-plan-v2&envId=top-interview-150">122.买卖股票的最佳时机 II</a><br>
  *
  * @author namelessmyth
  * @version 1.0
- * @date 2023/9/15
  */
 public class Lee122 {
     /**
