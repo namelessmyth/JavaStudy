@@ -17,6 +17,12 @@
         <java.version>1.8</java.version>
     </properties>
 
+    <modules>
+        <module>springboot-thread</module>
+        <module>springboot-actuator</module>
+        <module>springboot-mashibing</module>
+    </modules>
+
     <dependencies>
         <!-- log4j2-slf4j-适配器 -->
         <dependency>

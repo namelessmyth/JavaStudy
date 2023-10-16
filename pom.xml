@@ -5,8 +5,6 @@
     <groupId>com.sjj</groupId>
     <artifactId>mashibing</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>mashibing</name>
-    <description>mashibing</description>
     <packaging>pom</packaging>
 
     <properties>

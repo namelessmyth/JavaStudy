@@ -11,8 +11,6 @@
     <groupId>com.gem.springboot</groupId>
     <artifactId>springboot-thread</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>springboot-thread</name>
-    <description>springboot-thread</description>
 
     <properties>
         <java.version>1.8</java.version>
