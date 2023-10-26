@@ -5,7 +5,7 @@
 <Configuration status="warn" monitorInterval="30">
     <!-- 集中配置属性,使用时通过:${LOG_HOME} -->
     <properties>
-        <!-- 当前项目名称，供下方引用 -->
+        <!-- 当前项目名称，供下方引用，同时也是日志文件名称 -->
         <property name="PROJECT_NAME" value="tank-battle"/>
         <!-- 默认日志格式-包名自动缩减(同步异步通用) -->
         <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%-5level|%-5t|%logger{1.}: %msg%n"/>

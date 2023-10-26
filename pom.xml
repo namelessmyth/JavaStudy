@@ -13,11 +13,11 @@
 
     <modules>
         <module>algorithm</module>
-        <module>SpringCloudAlibaba</module>
         <module>DesignPattern</module>
         <module>JVM</module>
         <module>MQ</module>
         <module>TankBattle</module>
+        <module>db</module>
     </modules>
 
     <dependencies>
@@ -62,15 +62,7 @@
             <version>5.9.3</version>
             <scope>test</scope>
         </dependency>
+        
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
