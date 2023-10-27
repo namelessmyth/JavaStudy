@@ -1,7 +1,6 @@
 package com.gem.db.mongodb;
 
 import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
 import com.mongodb.client.ClientSession;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -23,7 +22,7 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 
 
-class MongoClientTest {
+public class MongoClientTest {
     //数据库
     private MongoDatabase db;
     //文档集合
@@ -33,10 +32,9 @@ class MongoClientTest {
 
     @BeforeEach
     public void init() {
-        ServerAddress sa = new ServerAddress("docker-study", 27017);
-        client = new MongoClient(sa);
+        client = new MongoClient("docker-study", 27017);
         db = client.getDatabase("test");
-        doc = db.getCollection("c1");
+        doc = db.getCollection("collection1");
     }
 
     @Test

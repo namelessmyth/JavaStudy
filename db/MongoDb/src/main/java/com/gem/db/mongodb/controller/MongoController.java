@@ -24,8 +24,8 @@ public class MongoController {
     @GetMapping("/insertOne")
     public String insertOne() {
         MongoPO p = new MongoPO();
-        p.setA(3);
-        p.setB(3);
+        p.setA(4);
+        p.setB(4);
         mongoTemplate.insert(p);
         return p.toString();
     }
