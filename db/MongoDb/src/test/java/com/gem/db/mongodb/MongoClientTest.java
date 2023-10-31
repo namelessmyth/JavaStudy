@@ -1,6 +1,8 @@
 package com.gem.db.mongodb;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.ClientSession;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -13,9 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Filters.*;
@@ -32,7 +32,10 @@ public class MongoClientTest {
 
     @BeforeEach
     public void init() {
-        client = new MongoClient("docker-study", 27017);
+        MongoCredential c = MongoCredential.createCredential("admin", "admin", "123456".toCharArray());
+        List<MongoCredential> list = new ArrayList<>();
+        list.add(c);
+        client = new MongoClient(new ServerAddress("docker-study", 27017), list);
         db = client.getDatabase("test");
         doc = db.getCollection("collection1");
     }
