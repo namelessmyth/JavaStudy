@@ -41,7 +41,24 @@ public class Lee209 {
         return result == Integer.MAX_VALUE ? 0 : result;
     }
 
+    public int goOver(int target, int[] nums) {
+        int result = Integer.MAX_VALUE;
+        int sum = 0;
+        int left = 0;
+        for (int right = 0; right < nums.length; right++) {
+            sum += nums[right];
+            while (sum >= target) {
+                result = Math.min(result, right - left + 1);
+                sum -= nums[left++];
+            }
+        }
+        if (result == Integer.MAX_VALUE) {
+            result = 0;
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
-        System.out.println(new Lee209().minSubArrayLen(7, new int[]{2, 3, 1, 2, 4, 3}));
+        System.out.println(new Lee209().goOver(7, new int[]{2, 3, 1, 2, 4, 3}));
     }
 }
