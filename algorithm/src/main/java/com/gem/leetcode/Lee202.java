@@ -1,8 +1,5 @@
 package com.gem.leetcode;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * <a href="https://leetcode.cn/problems/happy-number/">
  * 202. 快乐数
@@ -31,10 +28,10 @@ public class Lee202 {
     /**
      * <ol>
      *     <a href="https://leetcode.cn/problems/happy-number/solutions/224894/kuai-le-shu-by-leetcode-solution/?envType=study-plan-v2&envId=top-interview-150">快慢指针法</a>
-     *     这道题只会有3种情况，
-     *     <li>是快乐数，要么是快指针先到1，要么是慢指针到1之后，他两相等。</li>
+     *     这道题只会有以下2种情况，
+     *     <li>是快乐数，要么是快指针先到1，要么是慢指针到1之后，他两最终相遇（相等）。</li>
      *     <li>计算结果存在死循环，也就是链表存在环，那快慢指针一定会相遇</li>
-     *     <li>计算结果变得无穷大，快慢指针永不相遇
+     *     <li>计算结果变得无穷大，快慢指针永不相遇，这种情况不会出现。
      *          <ol>
      *              <li>这种情况实际不存在，int最大值是一个10位数，值也就是260</li>
      *              <li>就算10个位数都是9，他们的平方相加最大也就810</li>
