@@ -8,7 +8,7 @@ package com.gem.leetcode.binaryTree;
  * @date 2023/3/3
  */
 public class TreeNode {
-    int val;
+    public int val;
     public TreeNode left;
     public TreeNode right;
 
