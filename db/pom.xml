@@ -8,6 +8,7 @@
         <version>2.3.12.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.gem</groupId>
     <artifactId>db</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -16,6 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

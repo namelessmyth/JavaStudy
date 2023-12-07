@@ -33,19 +33,25 @@ public class ListNode {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("ListNode{val=[");
+        StringBuilder sb = new StringBuilder("ListNode{val:");
         sb.append(this.val);
         int size = 1;
         ListNode next = this.next;
+        sb.append(", next:");
+        if (next != null) {
+            sb.append(next.val);
+        }
+        sb.append(", vals:[");
+        sb.append(this.val);
         while (next != null) {
             sb.append(",");
             sb.append(next.val);
             next = next.next;
             size++;
         }
-        sb.append("], size={");
+        sb.append("], size:");
         sb.append(size);
-        sb.append("}}");
+        sb.append("}");
         return sb.toString();
     }
 }

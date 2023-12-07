@@ -18,6 +18,7 @@
         <module>MQ</module>
         <module>TankBattle</module>
         <module>db</module>
+        <module>j2se</module>
     </modules>
 
     <dependencies>
