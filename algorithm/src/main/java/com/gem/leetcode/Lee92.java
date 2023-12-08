@@ -44,7 +44,42 @@ public class Lee92 {
         return pre.next;
     }
 
+
+    /**
+     * <ol>
+     *     <li>给链表加一个空的头结点，确保程序逻辑一致</li>
+     *     <li>通过循环找到left起始节点和left左边节点</li>
+     *     <li>循环处理直到right节点，将其中的每个节点的next引用反过来</li>
+     *     <li>将left左边节点指向right节点，left节点指向riht的右节点</li>
+     * </ol>
+     */
+    public ListNode my(ListNode head, int left, int right) {
+        ListNode newHead = new ListNode(-1);
+        newHead.next = head;
+
+        ListNode cur = newHead;
+        for (int i = 1; i < left; i++) {
+            cur = cur.next;
+        }
+
+        ListNode last = null;
+        ListNode reverseLeft = cur;
+        ListNode leftNode = cur.next;
+        cur = cur.next;
+
+        for (int i = left; i <= right; i++) {
+            ListNode next = cur.next;
+            cur.next = last;
+            last = cur;
+            cur = next;
+        }
+
+        reverseLeft.next = last;
+        leftNode.next = cur;
+        return newHead.next;
+    }
+
     public static void main(String[] args) {
-        System.out.println(new Lee92().reverseBetween(new ListNode(new int[]{1, 2, 3, 4, 5}), 0, 2));
+        System.out.println(new Lee92().my(new ListNode(new int[]{1, 2, 3, 4, 5}), 1, 5));
     }
 }
