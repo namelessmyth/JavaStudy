@@ -11,6 +11,11 @@ public class SynchronizedByteCode {
     public synchronized void m1(){
         System.out.println(1);
     }
+
+    public static synchronized void sm1(){
+        System.out.println(2);
+    }
+
     public static void main(String[] args) {
         int i = 0;
         //在project文件视图中选中java文件，然后选"view > view bytecode with Jclasslib"

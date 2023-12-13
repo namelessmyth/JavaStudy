@@ -15,27 +15,36 @@ public class Lee98 {
         return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
     }
 
-    public boolean isValidBST(TreeNode node, long lower, long upper) {
+    /**
+     *
+     * <ol>有效二叉搜索树定义如下
+     *     <li>节点的左子树只包含小于当前节点的数（递归）。</li>
+     *     <li>节点的右子树只包含大于当前节点的数（递归）。</li>
+     *     <li>所有左子树和右子树自身必须也是二叉搜索树。</li>
+     * </ol>
+     * @param node
+     * @param min
+     * @param max
+     * @return
+     */
+    public boolean isValidBST(TreeNode node, long min, long max) {
         if (node == null) {
             return true;
         }
-        if (node.val <= lower || node.val >= upper) {
+        if (node.val <= min || node.val >= max) {
+            //当前节点必须在最小值和最大值之间，不在这个范围则不是。
             return false;
         }
-        return isValidBST(node.left, lower, node.val) && isValidBST(node.right, node.val, upper);
+        //对于左子节点，应该要小于父节点且大于最小值，对于右子节点应该大于父节点小于最大值
+        return isValidBST(node.left, min, node.val) && isValidBST(node.right, node.val, max);
     }
 
-    public boolean myfault(TreeNode root) {
-        if (root != null) {
-            if(root.left != null && root.left.val >= root.val){
+    public boolean my(TreeNode node, long min, long max) {
+        if(node != null){
+            if(node.val <= min || node.val >= max){
                 return false;
             }
-            if(root.right != null && root.right.val <= root.val){
-                return false;
-            }
-            if(!isValidBST(root.left) || !isValidBST(root.right)){
-                return false;
-            }
+            return my(node, min, node.val) && my(node, node.val, max);
         }
         return true;
     }

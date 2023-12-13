@@ -12,7 +12,8 @@ public class TreeNode {
     public TreeNode left;
     public TreeNode right;
 
-    public TreeNode() {}
+    public TreeNode() {
+    }
 
     public TreeNode(int val) {
         this.val = val;
@@ -22,5 +23,12 @@ public class TreeNode {
         this.val = val;
         this.left = left;
         this.right = right;
+    }
+
+    @Override
+    public String toString() {
+        String left = this.left == null ? "" : this.left.val + "";
+        String right = this.right == null ? "" : this.right.val + "";
+        return String.format("TreeNode{val:%s, left:%s, right:%s}", this.val, left, right);
     }
 }
