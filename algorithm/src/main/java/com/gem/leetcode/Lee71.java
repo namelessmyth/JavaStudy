@@ -3,8 +3,8 @@ package com.gem.leetcode;
 import java.util.*;
 
 /**
- * <a href="https://leetcode.cn/problems/set-matrix-zeroes/">
- * 73. 矩阵置零（中等）
+ * <a href="https://leetcode.cn/problems/simplify-path/">
+ * 71. 简化路径（中等）
  * </a><br>
  *
  * @author namelessmyth

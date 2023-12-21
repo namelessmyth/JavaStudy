@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="vue.js"></script>
+    <script>
+        //策略函数
+        Vue.config.optionMergeStrategies.count = function (parent, child, vm) {
+            return child >= 99 ? child : 99;
+        }
+
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                message: "hello Vue"
+            },
+            count: 109
+        })
+
+        console.log(vm.$options)
+    </script>
+</body>
+
+</html>
