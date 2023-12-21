@@ -11,10 +11,10 @@
     <artifactId>front</artifactId>
     <packaging>pom</packaging>
 
-    <name>front</name>
-    <url>http://maven.apache.org</url>
+    <name>前端项目</name>
     <modules>
         <module>TypeScript</module>
+        <module>vue2</module>
     </modules>
 
     <properties>
@@ -22,11 +22,5 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 </project>
