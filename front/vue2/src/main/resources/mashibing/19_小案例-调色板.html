@@ -17,6 +17,7 @@
     <div id="app" v-clock>
     <p class="pickers" :style="{background:'rgb('+r+','+g+','+b+')'}"></p>
         <p>
+            <!-- html5新特性，范围选择，数字输入，将其和同一个变量双向绑定 -->
             r:<input max="255" min="0" type="range" v-model="r"/><input max="255" min="0" v-model="r" type="number">
         </p>
         <p>
