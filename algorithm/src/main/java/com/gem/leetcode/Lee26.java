@@ -1,9 +1,9 @@
 package com.gem.leetcode;
 
-import java.util.Arrays;
-
 /**
- * https://leetcode.cn/problems/remove-duplicates-from-sorted-array/description/?envType=study-plan-v2&envId=top-interview-150<br>
+ * <a href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array/">
+ * 26. 删除有序数组中的重复项
+ * </a><br>
  *
  * @author namelessmyth
  * @version 1.0
@@ -34,8 +34,6 @@ public class Lee26 {
 
     public static void main(String[] args) {
         int[] nums1 = new int[]{0, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5};
-        int k = new Lee26().removeDuplicates(nums1);
-        System.out.println(Arrays.toString(nums1));
-        System.out.println(k);
+        System.out.println(new Lee26().removeDuplicates(nums1));
     }
 }
