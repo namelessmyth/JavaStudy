@@ -14,7 +14,6 @@
     <modules>
         <module>algorithm</module>
         <module>DesignPattern</module>
-        <module>JVM</module>
         <module>MQ</module>
         <module>TankBattle</module>
         <module>db</module>
