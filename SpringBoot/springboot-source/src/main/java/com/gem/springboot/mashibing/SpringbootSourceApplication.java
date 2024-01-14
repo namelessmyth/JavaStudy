@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Import;
 
 @Import(MyDeferredImportSelector.class)
 @SpringBootApplication
-public class SpringbootMashibingApplication {
+public class SpringbootSourceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringbootMashibingApplication.class, args);
+        SpringApplication.run(SpringbootSourceApplication.class, args);
     }
 
 }

@@ -9,7 +9,7 @@
     </parent>
 
     <groupId>com.gem.springboot</groupId>
-    <artifactId>springboot-mashibing</artifactId>
+    <artifactId>springboot-source</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>springboot-mashibing</name>
     <description>springboot-mashibing</description>
