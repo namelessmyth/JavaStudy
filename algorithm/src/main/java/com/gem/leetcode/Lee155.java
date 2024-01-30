@@ -3,14 +3,22 @@ package com.gem.leetcode;
 import java.util.*;
 
 /**
- * <a href="https://leetcode.cn/problems/simplify-path/">
- * 71. 简化路径（中等）
+ * <a href="https://leetcode.cn/problems/min-stack/description/">
+ * 155. 最小栈（中等）
  * </a><br>
  *
  * @author namelessmyth
  * @version 1.0
  */
 public class Lee155 {
+    /**
+     * 仿照链表的思路实现，创建链表元素记录当前值的同时也记录最小值
+     * 每次往链表中放入新元素时，新元素作为当前元素，指向老元素同时更新最小值。<br>
+     * 调用pop方法时，将当前元素指向下一个老元素，之前的元素失去指向会自动被回收。
+     * 调用top方法时，返回当前元素的val。
+     * 调用getMin方法时，返回当前元素的min。
+     * @param args
+     */
     public static void main(String[] args) {
         MinStack obj = new MinStack();
         obj.push(1);
