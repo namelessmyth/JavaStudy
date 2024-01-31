@@ -15,54 +15,34 @@
 
 
 
-## DesignPattern
+## 目录结构说明
 
-设计模式相关代码。
-
-
-
-## MQ
-
-消息中间件，包含kafka，RocketMQ
-
-
-
-## SpringBoot
-
-以SpringBoot为基础的项目。包含缓存，线程，actuator，Springboot源码等相关代码
-
-
-
-## SpringCloudAlibaba
-
-阿里微服务组件，包含nacos，sentinel，gateway，feign
-
-
-
-## TankBattle
-
-坦克大战，普通版，设计模式版，Netty版
-
-
-
-## algorithm
-
-Leetcode题目的源码。同时还有学习算法&数据结构的相关代码。
-
-
-
-## db
-
-java操作数据库的相关代码。
-
-
-
-## Front
-
-前端代码
-
-
-
-## j2se
-
-j2se基础代码，包含多线程，JVM等相关代码。
+```bat
+目录结构
+├─JavaStudy                # 顶层父项目，公共依赖
+│  ├─DesignPattern         # 设计模式
+│  ├─algorithm             # 算法，包含leetcode题解
+│  ├─TankBattle            # 坦克大战设计模式版，Netty版
+│  ├─MQ                    # 消息中间件-父项目
+│  │  ├─karfka_mq          # karfka独立
+│  │  ├─karfka_spring      # karfka集成Spring
+│  │  ├─RocketMQ           # RocketMQ独立
+│  │  ├─RocketMQ_spring    # RocketMQ集成Spring
+│  ├─SpringCloudAlibaba    # 微服务父项目
+│  │  ├─nacos-consumer     # nacos客户端
+│  │  ├─nacos-provider     # nacos服务端
+│  │  ├─gateway-LoadBalance# gateway负载均衡
+│  │  ├─sentinel-persist   # sentinel降级熔断
+│  │  ├─feign-consumer     # feign服务调用
+│  ├─SpringBoot            # SpringBoot-父项目
+│  │  ├─springboot-source  # SpringBoot源码分析
+│  │  ├─springboot-cache   # SpringBoot集成缓存
+│  │  ├─springboot-thread  # SpringBoot集成多线程
+│  │  ├─springboot-actuator# SpringBoot监控
+│  ├─j2se                  # J2SE项目
+│  │  ├─JVM                # JVM底层研究
+│  │  ├─thread             # 多线程并发编程
+│  │  ├─sentinel-persist   # sentinel降级熔断
+│  ├─db                    # Java连接数据库
+│  │  ├─MongoDb            # Java操作MongoDB
+```
